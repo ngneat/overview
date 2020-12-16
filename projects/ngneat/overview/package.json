@@ -1,0 +1,28 @@
+{
+  "name": "@ngneat/overview",
+  "version": "1.0.0",
+  "peerDependencies": {
+    "@angular/common": "^11.0.4",
+    "@angular/core": "^11.0.4"
+  },
+  "dependencies": {
+    "tslib": "^2.0.0"
+  },
+  "keywords": [
+    "angular",
+    "angular 2",
+    "overview"
+  ],
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "bugs": {
+    "url": "https://github.com/ngneat/overview/issue"
+  },
+  "homepage": "https://github.com/ngneat/overview#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ngneat/overview"
+  }
+}
