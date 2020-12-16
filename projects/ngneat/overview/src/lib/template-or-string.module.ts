@@ -1,14 +1,14 @@
 import { Directive, Input, NgModule, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
 
 @Directive({
-  selector: '[lmgTemplateOrString]',
+  selector: '[templateOrString]',
 })
 export class TemplateOrStringDirective implements OnInit {
   @Input() set lmgTemplateOrStringContext(context: unknown) {
     this.context = context;
   }
 
-  @Input('lmgTemplateOrString') content: string | TemplateRef<any>;
+  @Input('templateOrString') content: string | TemplateRef<any>;
 
   private context: unknown;
 

@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, NgModule, TemplateRef } from '@angular/core';
+import { Content } from './types';
 
 enum ContentType {
   String,
@@ -8,7 +9,7 @@ enum ContentType {
 }
 
 @Component({
-  selector: 'lmg-dynamic-content',
+  selector: 'dynamic-content',
   template: `
     <ng-container [ngSwitch]="contentType">
       <div *ngSwitchCase="ContentType.String" [innerHTML]="content"></div>
@@ -35,18 +36,18 @@ export class DynamicContentComponent {
   ContentType = ContentType;
 
   @Input()
-  set content(contentType: ViewContent) {
+  set content(contentType: Content) {
     this._content = contentType;
     this.resolveContentType();
   }
 
-  get content(): ViewContent {
+  get content(): Content {
     return this._content;
   }
 
   contentType = ContentType.String;
 
-  private _content: ViewContent;
+  private _content: Content;
 
   private resolveContentType() {
     if (typeof this.content === 'string') {
