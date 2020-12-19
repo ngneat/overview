@@ -7,22 +7,24 @@ import {
   Type,
   ViewContainerRef,
 } from '@angular/core';
-import { Content, ViewRef } from './types';
+import { Content, isComponent, isString, isTemplateRef, ViewRef } from './types';
 import { TplRef } from './template-ref';
 import { StringRef } from './string-ref';
 import { CompRef } from './comp-ref';
 
-interface ViewOptions {
-  vcr: ViewContainerRef | undefined;
+interface _ViewOptions {
+  vcr?: ViewContainerRef | undefined;
 }
 
-interface CompViewOptions extends ViewOptions {
-  injector: Injector | undefined;
+interface CompViewOptions extends _ViewOptions {
+  injector?: Injector | undefined;
 }
 
-interface TemplateViewOptions extends ViewOptions {
-  context: Record<string, any> | undefined;
+interface TemplateViewOptions extends _ViewOptions {
+  context?: Record<string, any> | undefined;
 }
+
+export type ViewOptions = _ViewOptions & CompViewOptions & TemplateViewOptions;
 
 @Injectable({ providedIn: 'root' })
 export class ViewService {
@@ -47,12 +49,12 @@ export class ViewService {
     });
   }
 
-  createView(content: Content, viewOptions: ViewOptions & CompViewOptions & TemplateViewOptions): ViewRef {
-    if (content instanceof TemplateRef) {
+  createView(content: Content, viewOptions: _ViewOptions & CompViewOptions & TemplateViewOptions): ViewRef {
+    if (isTemplateRef(content)) {
       return this.createTemplate(content, viewOptions);
-    } else if (typeof content === 'function') {
+    } else if (isComponent(content)) {
       return this.createComponent(content, viewOptions);
-    } else if (typeof content === 'string') {
+    } else if (isString(content)) {
       return new StringRef(content);
     } else {
       throw 'Type of content is not supported';

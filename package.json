@@ -12,7 +12,7 @@
     "hooks:pre-commit": "node hooks/pre-commit.js",
     "commit": "git-cz",
     "release:first": "npm run release -- --first-release",
-    "build:lib": "ng build @ngneat/overview",
+    "build:lib": "ng build @ngneat/overview --prod",
     "test:lib": "ng test @ngneat/overview",
     "release": "cd projects/ngneat/overview && standard-version --infile ../../../CHANGELOG.md",
     "test:lib:headless": "cross-env CI=true npm run test:lib"
@@ -29,6 +29,7 @@
     "@angular/router": "~11.0.3",
     "@ngneat/lib": "^1.0.5",
     "rxjs": "~6.6.0",
+    "tippy.js": "^6.2.7",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"
   },

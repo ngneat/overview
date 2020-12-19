@@ -4,7 +4,7 @@ import { Directive, Input, NgModule, OnInit, TemplateRef, ViewContainerRef } fro
   selector: '[templateOrString]',
 })
 export class TemplateOrStringDirective implements OnInit {
-  @Input() set lmgTemplateOrStringContext(context: unknown) {
+  @Input() set templateOrStringContext(context: unknown) {
     this.context = context;
   }
 
@@ -24,4 +24,4 @@ export class TemplateOrStringDirective implements OnInit {
   declarations: [TemplateOrStringDirective],
   exports: [TemplateOrStringDirective],
 })
-export class TemplateOrStringDirectiveModule {}
+export class TemplateOrStringModule {}

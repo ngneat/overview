@@ -40,10 +40,6 @@ export class TplRef<C> implements ViewRef {
       this.element = this.viewRef.rootNodes[0];
     } else {
       this.element = document.createElement('div');
-      // The `node` might be an instance of the `Comment` class,
-      // which is an `ng-container` element. We shouldn't filter it
-      // out since there can be `ngIf` or any other directive bound
-      // to the `ng-container`.
       this.element.append(...this.viewRef.rootNodes);
     }
 
