@@ -54,7 +54,9 @@ export class TplRef<C> implements ViewRef {
 
     if (!this.args.vcr) {
       this.args.appRef.detachView(this.viewRef);
-      this.viewRef.destroy();
     }
+
+    this.viewRef.destroy();
+    this.viewRef = null;
   }
 }
