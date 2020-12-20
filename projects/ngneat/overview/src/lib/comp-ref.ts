@@ -22,7 +22,11 @@ export class CompRef<T> implements ViewRef {
   constructor(private args: Args<T>) {
     const factory = this.args.resolver.resolveComponentFactory<T>(this.args.component);
     if (this.args.vcr) {
-      this.compRef = this.args.vcr.createComponent(factory);
+      this.compRef = this.args.vcr.createComponent(
+        factory,
+        this.args.vcr.length,
+        args.injector || this.args.vcr.injector
+      );
     } else {
       this.compRef = factory.create(this.args.injector);
       this.args.appRef.attachView(this.compRef.hostView);
