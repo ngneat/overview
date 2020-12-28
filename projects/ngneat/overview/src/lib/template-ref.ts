@@ -24,6 +24,7 @@ export class TplRef<C> implements ViewRef {
   constructor(private args: Args<C>) {
     if (this.args.vcr) {
       this.viewRef = this.args.vcr.createEmbeddedView(this.args.tpl, this.args.context || {});
+      this.viewRef.detectChanges();
     } else {
       this.viewRef = this.args.tpl.createEmbeddedView(this.args.context || ({} as C));
       this.viewRef.detectChanges();
