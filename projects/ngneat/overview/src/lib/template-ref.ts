@@ -37,11 +37,12 @@ export class TplRef<C> implements ViewRef {
   }
 
   getElement(): Element {
-    if (this.viewRef.rootNodes.length === 1) {
-      this.element = this.viewRef.rootNodes[0];
+    const rootNodes = this.viewRef.rootNodes;
+    if (rootNodes.length === 1 && rootNodes[0] === Node.ELEMENT_NODE) {
+      this.element = rootNodes[0];
     } else {
       this.element = document.createElement('div');
-      this.element.append(...this.viewRef.rootNodes);
+      this.element.append(...rootNodes);
     }
 
     return this.element;

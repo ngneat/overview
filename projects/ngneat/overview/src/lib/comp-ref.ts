@@ -33,6 +33,10 @@ export class CompRef<T> implements ViewRef {
     }
   }
 
+  get ref() {
+    return this.compRef;
+  }
+
   setInput<K extends keyof ExcludeFunctions<T>>(input: K, value: T[K]) {
     this.compRef.instance[input] = value;
 
