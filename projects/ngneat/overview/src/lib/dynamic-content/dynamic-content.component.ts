@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, NgModule, TemplateRef } from '@angular/core';
-import { Content } from './types';
+import { Content } from '../views/types';
 
 enum ContentType {
   String,

@@ -1,6 +1,7 @@
 import { Directive, EmbeddedViewRef, Input, NgModule, OnDestroy, OnInit, TemplateRef } from '@angular/core';
 import { TeleportService } from './teleport.service';
-import { TeleportOutletDirective } from './portal-outlet.directive';
+import { TeleportOutletDirective } from './teleport-outlet.directive';
+import { Subscription } from 'rxjs';
 
 @Directive({
   selector: '[teleportTo]',
@@ -8,17 +9,20 @@ import { TeleportOutletDirective } from './portal-outlet.directive';
 export class TeleportDirective implements OnInit, OnDestroy {
   @Input() teleportTo: string;
   private viewRef: EmbeddedViewRef<any>;
+  private subscription: Subscription | undefined;
 
   constructor(private tpl: TemplateRef<any>, private service: TeleportService) {}
 
   ngOnInit() {
-    const outlet = this.service.ports.get(this.teleportTo);
-    if (outlet) {
-      this.viewRef = outlet.createEmbeddedView(this.tpl);
-    }
+    this.subscription = this.service.outlet$(this.teleportTo).subscribe((outlet) => {
+      if(outlet) {
+        this.viewRef = outlet.createEmbeddedView(this.tpl);
+      }
+    });
   }
 
   ngOnDestroy() {
+    this.subscription?.unsubscribe();
     this.viewRef?.destroy();
   }
 }

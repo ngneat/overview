@@ -11,6 +11,7 @@ export class TeleportOutletDirective implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.service.ports.set(this.teleportOutlet, this.vcr);
+    this.service.newOutlet(this.teleportOutlet);
   }
 
   ngOnDestroy() {

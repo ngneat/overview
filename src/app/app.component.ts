@@ -13,7 +13,7 @@ export class AppComponent {
   @ViewChild('button', { static: true }) button: ElementRef;
   @ViewChild(TemplateRef, { static: true }) tpl: TemplateRef<any>;
   interval = interval(1000).pipe(finalize(() => console.log('tpl destroyed')));
-
+  show = true;
   constructor(private tippy: TippyService) {}
 
   ngOnInit() {

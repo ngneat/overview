@@ -8,3 +8,17 @@
   <app-list [value]="'bla'"></app-list>
   <button (click)="hide()">Close</button>
 </ng-template>
+
+
+
+<ng-template teleportTo="test">
+  <h1>Teleported</h1>
+  {{ interval | async }}
+</ng-template>
+
+<ng-template teleportTo="test">
+  <h1>Teleported2</h1>
+</ng-template>
+
+<button (click)="show = !show">Toggle outlet</button>
+<section teleportOutlet="test" *ngIf="show"></section>

@@ -30,7 +30,7 @@ export type ViewOptions = _ViewOptions & CompViewOptions & TemplateViewOptions;
 export class ViewService {
   constructor(private resolver: ComponentFactoryResolver, private injector: Injector, private appRef: ApplicationRef) {}
 
-  createComponent<C>(component: Type<C>, options: CompViewOptions) {
+  createComponent<C>(component: Type<C>, options: CompViewOptions = {}) {
     return new CompRef<C>({
       component,
       vcr: options.vcr,
@@ -40,7 +40,7 @@ export class ViewService {
     });
   }
 
-  createTemplate<C>(tpl: TemplateRef<C>, options: TemplateViewOptions) {
+  createTemplate<C>(tpl: TemplateRef<C>, options: TemplateViewOptions = {}) {
     return new TplRef({
       vcr: options.vcr,
       appRef: this.appRef,
@@ -49,7 +49,7 @@ export class ViewService {
     });
   }
 
-  createView(content: Content, viewOptions: _ViewOptions & CompViewOptions & TemplateViewOptions): ViewRef {
+  createView(content: Content, viewOptions: _ViewOptions & CompViewOptions & TemplateViewOptions = {}): ViewRef {
     if (isTemplateRef(content)) {
       return this.createTemplate(content, viewOptions);
     } else if (isComponent(content)) {
