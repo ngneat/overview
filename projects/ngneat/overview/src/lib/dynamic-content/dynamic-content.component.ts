@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input, NgModule, TemplateRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Injector, Input, NgModule, TemplateRef } from '@angular/core';
 import { Content } from '../views/types';
 
 enum ContentType {
@@ -15,11 +15,11 @@ enum ContentType {
       <div *ngSwitchCase="ContentType.String" [innerHTML]="content"></div>
 
       <ng-container *ngSwitchCase="ContentType.Template">
-        <ng-container *ngTemplateOutlet="content"></ng-container>
+        <ng-container *ngTemplateOutlet="content; context: context"></ng-container>
       </ng-container>
 
       <ng-container *ngSwitchCase="ContentType.Component">
-        <ng-container *ngComponentOutlet="content"></ng-container>
+        <ng-container *ngComponentOutlet="content; injector: injector"></ng-container>
       </ng-container>
     </ng-container>
   `,
@@ -40,6 +40,9 @@ export class DynamicContentComponent {
     this._content = contentType;
     this.resolveContentType();
   }
+
+  @Input() context: any;
+  @Input() injector: Injector;
 
   get content(): Content {
     return this._content;

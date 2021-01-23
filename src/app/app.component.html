@@ -1,3 +1,4 @@
+<h1>Teleport</h1>
 <app-nav></app-nav>
 
 <button #button>Click</button>
@@ -8,8 +9,6 @@
   <app-list [value]="'bla'"></app-list>
   <button (click)="hide()">Close</button>
 </ng-template>
-
-
 
 <ng-template teleportTo="test">
   <h1>Teleported</h1>
@@ -22,3 +21,16 @@
 
 <button (click)="show = !show">Toggle outlet</button>
 <section teleportOutlet="test" *ngIf="show"></section>
+
+<h1>Dynamic content</h1>
+
+<h5>Template</h5>
+<dynamic-content [content]="tpl" [context]="{ $implicit: 'Netanel' }"></dynamic-content>
+
+<ng-template #tpl let-name>
+  <p>hello from tpl</p>
+  <p>Content: {{ name }}</p>
+</ng-template>
+
+<h5>Component</h5>
+<dynamic-content [content]="component" [injector]="injector"></dynamic-content>

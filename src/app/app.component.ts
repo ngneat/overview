@@ -1,8 +1,9 @@
-import { Component, ElementRef, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, Injector, TemplateRef, ViewChild } from '@angular/core';
 import { TippyService } from './tippy.service';
 import { ListComponent } from './list/list.component';
 import { interval } from 'rxjs';
 import { finalize } from 'rxjs/operators';
+import { HelloComponent } from './hello/hello.component';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,17 @@ export class AppComponent {
   @ViewChild(TemplateRef, { static: true }) tpl: TemplateRef<any>;
   interval = interval(1000).pipe(finalize(() => console.log('tpl destroyed')));
   show = true;
-  constructor(private tippy: TippyService) {}
+  component = HelloComponent;
+  injector = Injector.create({
+    providers: [
+      {
+        provide: 'name',
+        useValue: 'Netanel',
+      },
+    ],
+    parent: this.parent,
+  });
+  constructor(private tippy: TippyService, private parent: Injector) {}
 
   ngOnInit() {
     this.tippy.create(this.button.nativeElement, ListComponent, {
