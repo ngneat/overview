@@ -9,6 +9,17 @@
   "imageSize": 100,
   "commit": true,
   "commitConvention": "angular",
-  "contributors": [],
+  "contributors": [
+    {
+      "login": "NetanelBasal",
+      "name": "Netanel Basal",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6745730?v=4",
+      "profile": "https://www.netbasal.com/",
+      "contributions": [
+        "code",
+        "ideas"
+      ]
+    }
+  ],
   "contributorsPerLine": 7
 }
