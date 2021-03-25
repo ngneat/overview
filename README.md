@@ -1,7 +1,12 @@
 <p align="center">
  <img width="20%" height="20%" src="./logo.svg">
 </p>
-
+<h1 align="center">@ngneat/overview</h1>
+<p align="center">
+  <i>
+    This library provides a complete set of directives and components to help you load content dynamically in Angular!
+  </i>
+</p>
 <br />
 
 [![npm](https://img.shields.io/npm/v/@ngneat/overview?style=flat-square)](https://www.npmjs.com/package/@ngneat/overview)
@@ -12,8 +17,6 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 [![ngneat](https://img.shields.io/badge/@-ngneat-383636?style=flat-square&labelColor=8f68d4)](https://github.com/ngneat/)
 [![spectator](https://img.shields.io/badge/tested%20with-spectator-2196F3.svg?style=flat-square)](https://github.com/ngneat/spectator)
-
-> The Library Slogan
 
 ## Installation
 
@@ -58,9 +61,11 @@ import { Content } from '@ngneat/overview';
 
 @Component({ /*..*/ })
 export class AppComponent {
-  content: Content
+  content: Content = Math.random() > 0.5 ? MyDynamicComponent : MyDynamicTemplateRef;
 }
 ```
+
+You can also pass `context` and [`injector`](https://angular.io/api/core/Injector) as inputs with `dynamic-content`.
 
 ### `Teleport`
 
@@ -80,9 +85,9 @@ Then use in your template:
 
 ```html
 <!--
-  <app-navbar></app-navbar> may have following template:
+  app-navbar may have following template:
   <nav class="navbar">
-  ...
+    ...
   </nav>
 -->
 
@@ -90,6 +95,15 @@ Then use in your template:
 
 <button (click)="logout" *teleportTo="'.navbar'">Logout</button>
 ```
+
+### Helper functions
+
+**@ngneat/overview** also provides some helper functions:
+
+| Function        | Args         | Returns   | Description                                                |
+| --------------- | ------------ | --------- | ---------------------------------------------------------- |
+| `isComponent`   | `value: any` | `boolean` | Returns `true` if `value` is a component, else `false`     |
+| `isTemplateRef` | `value: any` | `boolean` | Returns `true` if `value` is a `TemplateRef`, else `false` |
 
 ## Contributors ✨
 
