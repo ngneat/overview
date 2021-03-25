@@ -15,8 +15,6 @@
 
 > The Library Slogan
 
-Need help with docs and specs.
-
 ## Installation
 
 You can install it through **npm**:
