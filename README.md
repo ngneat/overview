@@ -25,6 +25,16 @@ npm i @ngneat/overview
 yarn add @ngneat/overview
 ```
 
+## Table of Contents
+
+- [DynamicContent](#DynamicContent)
+- [Teleporting](#Teleporting)
+- [StringOrTemplate](#StringOrTemplate)
+- [ViewService](#ViewService)
+    - [createView](#createView)
+    - [createComponent](#createComponent)
+    - [createTemplate](#createTemplate)
+
 ## `DynamicContent`
 
 Use the `<dynamic-content>` component to render a component, a template or HTML dynamically.
@@ -192,7 +202,7 @@ class ChartDirective{
 ```
 
 
-#### Options
+#### `createComponent` Options
 
 ```ts
 createComponent({
