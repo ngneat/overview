@@ -146,7 +146,7 @@ You can read more about this approach in this [article](https://netbasal.com/cre
 
 
 ## ViewService
-The `ViewService` provides `facade` methods to create modular views in Angular. It's been used in various projects like [hottoast](https://github.com/ngneat/hot-toast), and [helipopper](https://github.com/ngneat/helipopper). 
+The `ViewService` provides `facade` methods to create modular views in Angular. It's been used in various projects like [hot-toast](https://github.com/ngneat/hot-toast), and [helipopper](https://github.com/ngneat/helipopper). 
 
 ### `createComponent`
 The `createComponent` method takes a `Component`, and returns an instance of `CompRef`:
@@ -235,7 +235,7 @@ import { ViewService, Content } from '@ngneat/overview';
 @Injectable()
 class ToastService {
   constructor(private viewService: ViewService) {}
-s
+
   createToast(content: Content) {
     const ref = this.viewService.createView(content);
     document.body.appendChild(ref.getElement());
