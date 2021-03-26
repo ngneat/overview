@@ -25,9 +25,7 @@ npm i @ngneat/overview
 yarn add @ngneat/overview
 ```
 
-## Usage
-
-### `DynamicContent`
+## `DynamicContent`
 
 Use the `<dynamic-content>` component to render a component, a template or HTML dynamically.
 
@@ -53,7 +51,7 @@ export class FooModule {}
 
 You can also pass a `context` and an [`injector`](https://angular.io/api/core/Injector) as `inputs` to the `dynamic-content` component.
 
-### `Teleporting`
+## `Teleporting`
 
 Teleporting means rendering a view at a different location from its declaration. There are two cases it might be helpful: 
 
@@ -70,7 +68,7 @@ import { TeleportModule } from '@ngneat/overview';
 
 @Component({ 
   template: `
-    <div class="">
+    <div class="flex">
       <ng-container teleportOutlet="someId"></ng-container>
     </div>
   `
@@ -107,7 +105,7 @@ export class BarModule {}
 ```
 
 
-### `StringOrTemplate`
+## `StringOrTemplate`
 Let’s say we build a generic error component. What we want is to give our consumers the flexibly to create it by using one of three options:
 
 - They can choose to use the default text value
@@ -119,9 +117,7 @@ import { TemplateOrStringModule } from '@ngneat/overview';
 
 @Component({
   template: `
-    <ng-template [templateOrString]="tplRef || error">
-      <p>{{ error }}</p>
-    </ng-template>
+    <p *templateOrString="tplRef || error">{{ error }}</p>
   `,
 })
 export class ErrorComponent {
@@ -139,8 +135,104 @@ export class ErrorModule {}
 You can read more about this approach in this [article](https://netbasal.com/create-modular-components-with-angular-structural-directives-1a5198d9ab7d).
 
 
-### ViewService
-TBD
+## ViewService
+The `ViewService` provides `facade` methods to create modular views in Angular. It's been used in various projects like [hottoast](https://github.com/ngneat/hot-toast), and [helipopper](https://github.com/ngneat/helipopper). 
+
+### `createComponent`
+The `createComponent` method takes a `Component`, and returns an instance of `CompRef`:
+
+```ts
+import { ViewService, CompRef } from '@ngneat/overview';
+
+@Injectable()
+class ToastService {
+  componentRef: CompRef;
+
+  constructor(private viewService: ViewService) {}
+
+  init() {
+   this.componentRef = this.viewService
+      .createComponent(HotToastContainerComponent)
+      .setInput('defaultConfig', defaultConfig)
+      .appendTo(document.body);
+  }
+}
+```
+
+There are cases where we want to use an Angular [component](https://netbasal.com/using-angular-components-with-third-party-libraries-522a1f33003) template in a third-party library that takes a native DOM element or a string. In this case, we can use the `getRawContent` or the `getElement` method, respectively.
+
+```ts
+import { ViewService, CompRef } from '@ngneat/overview';
+
+@Directive()
+class ChartDirective{
+
+  constructor(private viewService: ViewService) {}
+
+  createChart(color: string) {
+   const ref = this.viewService
+      .createComponent(FooTooltip)
+      .setInput('color', color)
+      .detectChanges(document.body);
+
+     const content = ref.getRawContent();
+
+     ref.destroy();
+
+     Highcharts.chart('container', {
+      tooltip: {
+        formatter: function() {
+          return content;
+       },
+       useHTML: true
+     },
+   });
+  }
+}
+```
+
+
+#### Options
+
+```ts
+createComponent({
+  component: Type<C>;
+  injector: Injector;
+  resolver: ComponentFactoryResolver;
+  vcr: ViewContainerRef | undefined;
+  appRef: ApplicationRef | undefined;
+})
+```
+
+### `createTemplate`
+The `createTemplate` method takes a `TemplateRef`, and returns an instance of `ViewRef`.
+
+```ts
+createTemplate({
+  tpl: TemplateRef<C>;
+  context: C;
+  vcr: ViewContainerRef | undefined;
+  appRef: ApplicationRef | undefined;
+})
+```
+
+### `createView`
+The `createView` method takes a `Component`, a `TemplateRef` or a `string`, and creates a `View`:
+
+```ts
+import { ViewService, Content } from '@ngneat/overview';
+
+@Injectable()
+class ToastService {
+  constructor(private viewService: ViewService) {}
+s
+  createToast(content: Content) {
+    const ref = this.viewService.createView(content);
+    document.body.appendChild(ref.getElement());
+  }
+}
+```
+
 
 ## Contributors ✨
 
