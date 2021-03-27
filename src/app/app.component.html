@@ -10,10 +10,12 @@
   <button (click)="hide()">Close</button>
 </ng-template>
 
-<ng-template teleportTo="test">
+<ng-template *teleportTo="'#test'">
   <h1>Teleported</h1>
   {{ interval | async }}
 </ng-template>
+
+<div id="test"></div>
 
 <ng-template teleportTo="test">
   <h1>Teleported2</h1>
