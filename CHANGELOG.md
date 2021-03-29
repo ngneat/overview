@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/ngneat/overview/compare/v1.0.0...v2.0.0) (2021-03-29)
+
+
+### ⚠ BREAKING CHANGES
+
+* **lib:** remove dynamic-content and tplOrString
+
+remove `dynamic-content` and `tplOrString` in favor of the `dynamicView` directive
+
+### Features
+
+* **lib:** add dynamicView directive ([b0b43d4](https://github.com/ngneat/overview/commit/b0b43d41740a31571e975ea536e278508a91c3c2))
+
 ## 1.0.0 (2021-01-28)
 
 
