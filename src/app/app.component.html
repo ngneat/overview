@@ -10,12 +10,10 @@
   <button (click)="hide()">Close</button>
 </ng-template>
 
-<div *teleportTo="'#test'">
+<div *teleportTo="'test'">
   <h1>Teleported</h1>
   {{ interval | async }}
 </div>
-
-<div id="test"></div>
 
 <ng-template teleportTo="test">
   <h1>Teleported2</h1>
@@ -24,15 +22,19 @@
 <button (click)="show = !show">Toggle outlet</button>
 <section teleportOutlet="test" *ngIf="show"></section>
 
-<h1>Dynamic content</h1>
-
-<h5>Template</h5>
-<dynamic-content [content]="tpl" [context]="{ $implicit: 'Netanel' }"></dynamic-content>
-
-<ng-template #tpl let-name>
-  <p>hello from tpl</p>
-  <p>Content: {{ name }}</p>
-</ng-template>
+<h1>Dynamic View</h1>
 
 <h5>Component</h5>
-<dynamic-content [content]="component" [injector]="injector"></dynamic-content>
+<ng-container *dynamicView="component; injector: injector"></ng-container>
+
+<h5>Template</h5>
+<ng-template #mytpl let-title
+  ><b>{{ title }}</b></ng-template
+>
+<ng-container *dynamicView="mytpl; context: { $implicit: 'my title' }"></ng-container>
+
+<h5>Default Tpl</h5>
+<ng-container *dynamicView="null"> default tpl </ng-container>
+
+<h5>String</h5>
+<ng-container *dynamicView="'<h1>hello world</h1>'"></ng-container>

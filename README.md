@@ -1,12 +1,7 @@
 <p align="center">
  <img width="20%" height="20%" src="./logo.svg">
 </p>
-<h1 align="center">@ngneat/overview</h1>
-<p align="center">
-  <i>
-    This library provides a complete set of directives and components to help you load content dynamically in Angular!
-  </i>
-</p>
+
 <br />
 
 [![npm](https://img.shields.io/npm/v/@ngneat/overview?style=flat-square)](https://www.npmjs.com/package/@ngneat/overview)
@@ -18,6 +13,8 @@
 [![ngneat](https://img.shields.io/badge/@-ngneat-383636?style=flat-square&labelColor=8f68d4)](https://github.com/ngneat/)
 [![spectator](https://img.shields.io/badge/tested%20with-spectator-2196F3.svg?style=flat-square)](https://github.com/ngneat/spectator)
 
+> Overview - The Template for Success in Template Management
+
 ## Installation
 
 ```bash
@@ -27,39 +24,52 @@ yarn add @ngneat/overview
 
 ## Table of Contents
 
-- [DynamicContent](#DynamicContent)
+- [DynamicView](#DynamicContent)
 - [Teleporting](#Teleporting)
-- [StringOrTemplate](#StringOrTemplate)
 - [ViewService](#ViewService)
     - [createView](#createView)
     - [createComponent](#createComponent)
     - [createTemplate](#createTemplate)
 
-## `DynamicContent`
+## `DynamicView`
 
-Use the `<dynamic-content>` component to render a component, a template or HTML dynamically.
+Use the `dynamicView` structural directive to render a component, a template, HTML, or default template dynamically.
 
-```typescript
-import { Content, DynamicContentModule } from '@ngneat/overview';
+Let’s say we build a generic error component. What we want is to give our consumers the flexibly to create it by using one of three options:
 
-@Component({ 
+- They can choose to use the default template
+- They can choose to use their own text which can be static or dynamic
+- They can choose to pass their own template or component
+
+```ts
+import { DynamicViewModule, Content } from '@ngneat/overview';
+
+@Component({
   template: `
-    <dynamic-content [content]="content"></dynamic-content>
-  `
+    <div *dynamicView="view">
+      Default view
+    </div>
+  `,
 })
-export class FooComponent {
-  @Input() content: Content;
+export class ErrorComponent {
+  @Input() view: Content | undefined;
 }
 
-@NgModule({
-  imports: [DynamicContentModule]
-})
-export class FooModule {}
+
+You can also pass a `context` or an [`injector`](https://angular.io/api/core/Injector) as `inputs` to the directive:
+
+```html
+<h5>Component</h5>
+<ng-container *dynamicView="component; injector: injector"></ng-container>
+
+<h5>Template</h5>
+<ng-template #tpl let-title><b>{{ title }}</b></ng-template>
+
+<ng-container 
+     *dynamicView="tpl; 
+     context: { $implicit: 'my title' }">
+</ng-container>
 ```
-
-`content` can be a [`TemplateRef`](https://angular.io/api/core/TemplateRef), a [`Component`](https://angular.io/api/core/Component), a `string` or `HTML`.
-
-You can also pass a `context` and an [`injector`](https://angular.io/api/core/Injector) as `inputs` to the `dynamic-content` component.
 
 ## `Teleporting`
 
@@ -113,37 +123,6 @@ export class BarComponent {
 })
 export class BarModule {}
 ```
-
-
-## `StringOrTemplate`
-Let’s say we build a generic error component. What we want is to give our consumers the flexibly to create it by using one of three options:
-
-- They can choose to use the default text value
-- They can choose to use their own text which can be static or dynamic
-- They can choose to pass their own template
-
-```ts
-import { TemplateOrStringModule } from '@ngneat/overview';
-
-@Component({
-  template: `
-    <p *templateOrString="tplRef || error">{{ error }}</p>
-  `,
-})
-export class ErrorComponent {
-  @Input() error: string | TemplateRef<any> = 'There was an error';
-  @ContentChild(TemplateRef) tplRef: TemplateRef<any>;
-}
-
-
-@NgModule({
-  imports: [TemplateOrStringModule]
-})
-export class ErrorModule {}
-```
-
-You can read more about this approach in this [article](https://netbasal.com/create-modular-components-with-angular-structural-directives-1a5198d9ab7d).
-
 
 ## ViewService
 The `ViewService` provides `facade` methods to create modular views in Angular. It's been used in various projects like [hot-toast](https://github.com/ngneat/hot-toast), and [helipopper](https://github.com/ngneat/helipopper). 

@@ -50,7 +50,7 @@ export class TplRef<C> implements ViewRef {
 
   destroy() {
     if (this.viewRef.rootNodes[0] !== 1) {
-      this.element.parentNode.removeChild(this.element);
+      this.element?.parentNode.removeChild(this.element);
       this.element = null;
     }
 

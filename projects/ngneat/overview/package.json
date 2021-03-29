@@ -1,13 +1,15 @@
 {
   "name": "@ngneat/overview",
   "version": "1.0.0",
+  "description": "The Template for Success in Template Management",
   "dependencies": {
     "tslib": "^2.0.0"
   },
   "keywords": [
     "angular",
-    "angular 2",
-    "overview"
+    "views",
+    "dynamic views",
+    "teleport"
   ],
   "license": "MIT",
   "publishConfig": {

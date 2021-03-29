@@ -1,31 +1,26 @@
-import { Component, DebugElement } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { TeleportDirective } from './teleport.module';
-import { TeleportService } from './teleport.service';
+import { Component } from '@angular/core';
+import { createComponentFactory, Spectator } from '@ngneat/spectator';
+import { TeleportModule } from './teleport.module';
 
 @Component({
-  template: ` <div *teleportTo="'#projectHere'">Something here</div>
-    <div id="projectHere">Hi</div>`,
+  template: ` <div *teleportTo="'projectHere'">Some view</div>
+
+    <section>
+      <ng-container teleportOutlet="projectHere"></ng-container>
+    </section>`,
 })
 class TestComponent {}
 
 describe('TeleportDirective', () => {
-  let fixture: ComponentFixture<TestComponent>;
-  let de: DebugElement;
+  let spectator: Spectator<TestComponent>;
 
-  beforeEach(() => {
-    fixture = TestBed.configureTestingModule({
-      declarations: [TeleportDirective, TestComponent],
-      providers: [TeleportService],
-    }).createComponent(TestComponent);
-
-    fixture.detectChanges();
-
-    de = fixture.debugElement.query(By.css('#projectHere'));
+  const createComponent = createComponentFactory({
+    component: TestComponent,
+    imports: [TeleportModule],
   });
 
-  it('should project content', () => {
-    expect(de.nativeElement.textContent).toBe('Something here');
+  it('should render the view as sibling to the given outlet', () => {
+    spectator = createComponent();
+    expect(spectator.query('section')).toHaveText('Some view');
   });
 });
