@@ -54,8 +54,7 @@ import { DynamicViewModule, Content } from '@ngneat/overview';
 export class ErrorComponent {
   @Input() view: Content | undefined;
 }
-
-
+```
 You can also pass a `context` or an [`injector`](https://angular.io/api/core/Injector) as `inputs` to the directive:
 
 ```html
