@@ -54,6 +54,12 @@ import { DynamicViewModule, Content } from '@ngneat/overview';
 export class ErrorComponent {
   @Input() view: Content | undefined;
 }
+
+
+@NgModule({
+  imports: [DynamicViewModule]
+})
+class ErrorModule {}
 ```
 You can also pass a `context` or an [`injector`](https://angular.io/api/core/Injector) as `inputs` to the directive:
 
@@ -80,7 +86,7 @@ Teleporting means rendering a view at a different location from its declaration.
 You can read more about this approach in this [article](https://netbasal.com/beam-me-up-scotty-on-teleporting-templates-in-angular-a924f1a7798).
 
 
-Use the `teleportOutlet` directive to define a new `outlet`. An `outlet` is an anchor where the view will be projected into.
+Use the `teleportOutlet` directive to define a new `outlet`. An `outlet` is an anchor where the view will be projected as a sibling.
 
 ```typescript
 import { TeleportModule } from '@ngneat/overview';
@@ -150,7 +156,7 @@ class ToastService {
 There are cases where we want to use an Angular [component](https://netbasal.com/using-angular-components-with-third-party-libraries-522a1f33003) template in a third-party library that takes a native DOM element or a string. In this case, we can use the `getRawContent` or the `getElement` method, respectively.
 
 ```ts
-import { ViewService, CompRef } from '@ngneat/overview';
+import { ViewService } from '@ngneat/overview';
 
 @Directive()
 class ChartDirective{
