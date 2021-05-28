@@ -25,12 +25,16 @@ export class AppComponent {
     ],
     parent: this.parent,
   });
+  str = 'Hello';
   constructor(private tippy: TippyService, private parent: Injector) {}
 
   ngOnInit() {
     this.tippy.create(this.button.nativeElement, ListComponent, {
       interactive: true,
     });
+    setTimeout(() => {
+      this.str = 'Hi';
+    }, 3000);
   }
 
   click() {
