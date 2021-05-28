@@ -17,7 +17,7 @@ import { DynamicViewComponent } from './dynamic-view.component';
 @Directive({
   selector: '[dynamicView]',
 })
-export class DynamicViewDirective implements OnDestroy {
+export class DynamicViewDirective implements OnInit, OnDestroy {
   @Input('dynamicView')
   set view(content: Content) {
     this._view = content;
@@ -33,6 +33,10 @@ export class DynamicViewDirective implements OnDestroy {
   }
 
   constructor(private defaultTpl: TemplateRef<any>, private vcr: ViewContainerRef, private viewService: ViewService) {}
+
+  ngOnInit() {
+    this.resolveContentType();
+  }
 
   resolveContentType() {
     this.viewRef?.destroy();
