@@ -1,4 +1,5 @@
 import { Component, Inject, Injector, Optional } from '@angular/core';
+import { fakeAsync, tick } from '@angular/core/testing';
 import { createComponentFactory, Spectator } from '@ngneat/spectator';
 import { DynamicViewModule } from './dynamic-view.directive';
 
@@ -27,7 +28,7 @@ export class HelloComponent {
 
     <section id="string">
       <h5>String</h5>
-      <ng-container *dynamicView="'<h1>hello world</h1>'"></ng-container>
+      <ng-container *dynamicView="str"></ng-container>
     </section>
 
     <section id="defaultTpl">
@@ -47,7 +48,12 @@ class TestComponent {
     ],
     parent: this.parent,
   });
-  constructor(private parent: Injector) {}
+  str = 'hello world';
+  constructor(private parent: Injector) {
+    setTimeout(() => {
+      this.str = 'hello';
+    }, 3000);
+  }
 }
 
 describe('DynamicViewDirective', () => {
@@ -70,6 +76,11 @@ describe('DynamicViewDirective', () => {
   it('should create a view with string', () => {
     expect(spectator.query('#string').innerHTML).toContain('hello world');
   });
+
+  it('should update a view with dynamic string', fakeAsync(() => {
+    tick(3001);
+    expect(spectator.query('#string').innerHTML).toContain('hello');
+  }));
 
   it('should create default template', () => {
     expect(spectator.query('#defaultTpl').innerHTML).toContain('default tpl');
