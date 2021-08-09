@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.3](https://github.com/ngneat/overview/compare/v2.0.2...v2.0.3) (2021-08-09)
+
+
+### Bug Fixes
+
+* 🐛 fix view resolver ([4e34c35](https://github.com/ngneat/overview/commit/4e34c35f4e7c84efb1e20f3c31a636d8785a3838))
+
 ### [2.0.2](https://github.com/ngneat/overview/compare/v2.0.1...v2.0.2) (2021-06-02)
 
 
