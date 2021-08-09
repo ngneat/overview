@@ -1,11 +1,12 @@
 import {
-  ChangeDetectionStrategy,
   Directive,
   Injector,
   Input,
   NgModule,
+  OnChanges,
   OnDestroy,
   OnInit,
+  SimpleChanges,
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
@@ -17,25 +18,23 @@ import { DynamicViewComponent } from './dynamic-view.component';
 @Directive({
   selector: '[dynamicView]',
 })
-export class DynamicViewDirective implements OnInit, OnDestroy {
-  @Input('dynamicView')
-  set view(content: Content) {
-    this._view = content;
-    this.resolveContentType();
-  }
+export class DynamicViewDirective implements OnInit, OnChanges, OnDestroy {
+  @Input('dynamicView') view: Content;
   @Input('dynamicViewInjector') injector: Injector;
   @Input('dynamicViewContext') context: any;
 
   private viewRef: ViewRef;
-  private _view: Content;
-  get view() {
-    return this._view;
-  }
 
   constructor(private defaultTpl: TemplateRef<any>, private vcr: ViewContainerRef, private viewService: ViewService) {}
 
   ngOnInit() {
     this.resolveContentType();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.view && !changes.view.isFirstChange()) {
+      this.resolveContentType();
+    }
   }
 
   resolveContentType() {
