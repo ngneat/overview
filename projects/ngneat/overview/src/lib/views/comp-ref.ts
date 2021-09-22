@@ -77,7 +77,7 @@ export class CompRef<T> implements ViewRef {
   }
 
   destroy() {
-    this.compRef.destroy();
+    this.compRef && this.compRef.destroy();
     !this.args.vcr && this.args.appRef.detachView(this.compRef.hostView);
     this.compRef = null;
   }
