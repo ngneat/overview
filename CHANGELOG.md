@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0](https://github.com/ngneat/overview/compare/v2.0.4...v2.1.0) (2021-10-25)
+
+
+### Features
+
+* allow teleport bindings to be passed asynchronously ([05c164f](https://github.com/ngneat/overview/commit/05c164f8cb315e0d309f8e4a71d9dff0b85d9021))
+
 ### [2.0.4](https://github.com/ngneat/overview/compare/v2.0.3...v2.0.4) (2021-08-10)
 
 
