@@ -2,6 +2,9 @@
   "name": "@ngneat/overview",
   "version": "2.1.0",
   "description": "The Template for Success in Template Management",
+  "peerDependencies": {
+    "@angular/core": ">=13"
+  },
   "dependencies": {
     "tslib": "^2.0.0"
   },

@@ -15,6 +15,35 @@
 
 > Overview - The Template for Success in Template Management
 
+## Compatibility with Angular Versions
+
+<table>
+  <thead>
+    <tr>
+      <th>@ngneat/overview</th>
+      <th>Angular</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        2.x
+      </td>
+      <td>
+        >= 11 < 13
+      </td>
+    </tr>
+    <tr>
+      <td>
+        3.x
+      </td>
+      <td>
+        >= 13
+      </td>
+    </tr>
+  </tbody>
+</table>
+
 ## Installation
 
 ```bash
