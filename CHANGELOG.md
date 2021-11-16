@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0](https://github.com/ngneat/overview/compare/v2.1.0...v3.0.0) (2021-11-16)
+
+
+### ⚠ BREAKING CHANGES
+
+* The `@ngneat/overview` is shipped with `.mjs` files,
+following the APF (Angular Package Format) spec starting from Angular 13.
+`.mjs` files are compatible only with Angular 13 version and higher.
+
+### Features
+
+* upgrade to Angular 13 and switch to modern APF ([33f7463](https://github.com/ngneat/overview/commit/33f74636847fbf126abb2bbb152f5bb24789f5b1))
+* use new `createComponent` signature ([d47e249](https://github.com/ngneat/overview/commit/d47e249d5a323bc9dd1b7bf6514bcbd5c4d4d548))
+
 ## [2.1.0](https://github.com/ngneat/overview/compare/v2.0.4...v2.1.0) (2021-10-25)
 
 
