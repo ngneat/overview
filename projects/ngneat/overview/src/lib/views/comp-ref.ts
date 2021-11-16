@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { ExcludeFunctions, ViewRef } from './types';
 
-interface Args<C> {
+interface Options<C> {
   component: Type<C>;
   injector: Injector;
   resolver: ComponentFactoryResolver;
@@ -19,17 +19,16 @@ interface Args<C> {
 export class CompRef<T> implements ViewRef {
   private compRef: ComponentRef<T>;
 
-  constructor(private args: Args<T>) {
-    const factory = this.args.resolver.resolveComponentFactory<T>(this.args.component);
-    if (this.args.vcr) {
-      this.compRef = this.args.vcr.createComponent(
-        factory,
-        this.args.vcr.length,
-        args.injector || this.args.vcr.injector
-      );
+  constructor(private options: Options<T>) {
+    if (options.vcr) {
+      this.compRef = options.vcr.createComponent(options.component, {
+        index: options.vcr.length,
+        injector: options.injector || options.vcr.injector,
+      });
     } else {
-      this.compRef = factory.create(this.args.injector);
-      this.args.appRef.attachView(this.compRef.hostView);
+      const factory = options.resolver.resolveComponentFactory<T>(options.component);
+      this.compRef = factory.create(options.injector);
+      options.appRef.attachView(this.compRef.hostView);
     }
   }
 
@@ -78,7 +77,7 @@ export class CompRef<T> implements ViewRef {
 
   destroy() {
     this.compRef.destroy();
-    !this.args.vcr && this.args.appRef.detachView(this.compRef.hostView);
+    !this.options.vcr && this.options.appRef.detachView(this.compRef.hostView);
     this.compRef = null;
   }
 }
