@@ -1,4 +1,7 @@
 import { TemplateRef, Type } from '@angular/core';
+import { CompRef } from './comp-ref';
+import { StringRef } from './string-ref';
+import { TplRef } from './template-ref';
 
 export interface ViewRef {
   getElement(): Element | string;
@@ -14,6 +17,7 @@ type ExcludeFunctionPropertyNames<T> = {
 
 export type ExcludeFunctions<T> = Pick<T, ExcludeFunctionPropertyNames<T>>;
 export type Content = string | TemplateRef<any> | Type<any>;
+export type ResolveViewRef<T> = T extends Type<any> ? CompRef<T> : T extends TemplateRef<infer C> ? TplRef<C> : StringRef;
 
 export function isTemplateRef(value: any): value is TemplateRef<any> {
   return value instanceof TemplateRef;
