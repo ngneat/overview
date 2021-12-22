@@ -7,7 +7,7 @@ import {
   Type,
   ViewContainerRef,
 } from '@angular/core';
-import {Content, isComponent, isString, isTemplateRef, ResolveViewRef, ViewRef} from './types';
+import {Content, isComponent, isString, isTemplateRef, ViewRef} from './types';
 import { TplRef } from './template-ref';
 import { StringRef } from './string-ref';
 import { CompRef } from './comp-ref';
