@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.1](https://github.com/ngneat/overview/compare/v3.0.0...v3.0.1) (2021-12-22)
+
+
+### Bug Fixes
+
+* 🐛 create view typings ([5df4a42](https://github.com/ngneat/overview/commit/5df4a4238942f5ccbc678555b22b93676865efbf))
+
 ## [3.0.0](https://github.com/ngneat/overview/compare/v2.1.0...v3.0.0) (2021-11-16)
 
 
