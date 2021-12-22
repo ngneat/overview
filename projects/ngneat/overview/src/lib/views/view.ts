@@ -7,7 +7,7 @@ import {
   Type,
   ViewContainerRef,
 } from '@angular/core';
-import { Content, isComponent, isString, isTemplateRef, ViewRef } from './types';
+import {Content, isComponent, isString, isTemplateRef, ResolveViewRef, ViewRef} from './types';
 import { TplRef } from './template-ref';
 import { StringRef } from './string-ref';
 import { CompRef } from './comp-ref';
@@ -49,7 +49,11 @@ export class ViewService {
     });
   }
 
-  createView(content: Content, viewOptions: _ViewOptions & CompViewOptions & TemplateViewOptions = {}): ViewRef {
+  createView<T>(content: Type<T>, viewOptions: CompViewOptions): CompRef<T>;
+  createView<T>(content: TemplateRef<T>, viewOptions: TemplateViewOptions): TplRef<T>;
+  createView(content: string): StringRef;
+  createView(content: Content, viewOptions: ViewOptions): ViewRef;
+  createView<T extends Content>(content: T, viewOptions: ViewOptions = {}): ViewRef {
     if (isTemplateRef(content)) {
       return this.createTemplate(content, viewOptions);
     } else if (isComponent(content)) {
