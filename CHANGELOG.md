@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.3](https://github.com/ngneat/overview/compare/v3.0.2...v3.0.3) (2022-01-27)
+
+
+### Bug Fixes
+
+* 🐛 component should run cd ([ebfeda5](https://github.com/ngneat/overview/commit/ebfeda5b4ef0a368465591ec0bb18870baa993e2))
+
 ### [3.0.2](https://github.com/ngneat/overview/compare/v3.0.1...v3.0.2) (2021-12-22)
 
 
