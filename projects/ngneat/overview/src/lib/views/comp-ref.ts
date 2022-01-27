@@ -25,6 +25,7 @@ export class CompRef<T> implements ViewRef {
         index: options.vcr.length,
         injector: options.injector || options.vcr.injector,
       });
+      this.detectChanges();
     } else {
       const factory = options.resolver.resolveComponentFactory<T>(options.component);
       this.compRef = factory.create(options.injector);
