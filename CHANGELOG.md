@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0](https://github.com/ngneat/overview/compare/v3.0.4...v4.0.0) (2023-01-22)
+
+
+### ⚠ BREAKING CHANGES
+
+* 🧨 build target is now es2022, peer dependency is now angular v14+
+* 🧨 build target is now es2020
+
+### Features
+
+* 🎸 support context in components as injection token ([22b8ae0](https://github.com/ngneat/overview/commit/22b8ae0881fc1b8f64c436b9ac2755c27a576ed2))
+* 🎸 update to angular v14 ([448f33d](https://github.com/ngneat/overview/commit/448f33d21e1596da64cca7f80f19df63e6712dfd))
+* 🎸 update to angular v15 ([ff8ec48](https://github.com/ngneat/overview/commit/ff8ec48eaf8410a40cc848b2a870864c62cad41b))
+
 ### [3.0.4](https://github.com/ngneat/overview/compare/v3.0.3...v3.0.4) (2022-01-30)
 
 
