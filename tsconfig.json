@@ -9,11 +9,17 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "es2015",
+    "target": "ES2022",
     "module": "es2020",
-    "lib": ["es2018", "dom"],
+    "lib": [
+      "es2020",
+      "dom"
+    ],
     "paths": {
-      "@ngneat/overview": ["projects/ngneat/overview/src/public-api.ts"]
-    }
+      "@ngneat/overview": [
+        "projects/ngneat/overview/src/public-api.ts"
+      ]
+    },
+    "useDefineForClassFields": false
   }
 }

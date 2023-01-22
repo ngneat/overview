@@ -1,7 +1,6 @@
 import {
   ApplicationRef,
-  ComponentFactoryResolver,
-  ComponentRef,
+  ComponentRef, createComponent,  EnvironmentInjector,
   Injector,
   Type,
   ViewContainerRef,
@@ -11,7 +10,7 @@ import { ExcludeFunctions, ViewRef } from './types';
 interface Options<C> {
   component: Type<C>;
   injector: Injector;
-  resolver: ComponentFactoryResolver;
+  environmentInjector: EnvironmentInjector;
   vcr: ViewContainerRef | undefined;
   appRef: ApplicationRef | undefined;
 }
@@ -26,8 +25,9 @@ export class CompRef<T> implements ViewRef {
         injector: options.injector || options.vcr.injector,
       });
     } else {
-      const factory = options.resolver.resolveComponentFactory<T>(options.component);
-      this.compRef = factory.create(options.injector);
+      this.compRef = createComponent<T>(options.component, {
+        environmentInjector: options.environmentInjector
+      });
       options.appRef.attachView(this.compRef.hostView);
     }
   }
