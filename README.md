@@ -100,10 +100,12 @@ You can also pass a `context` or an [`injector`](https://angular.io/api/core/Inj
 <ng-template #tpl let-title><b>{{ title }}</b></ng-template>
 
 <ng-container 
-     *dynamicView="tpl; 
+     *dynamicView="tpl || component; 
      context: { $implicit: 'my title' }">
 </ng-container>
 ```
+
+If you pass `context` to a component and the value can be accessed via the `injectViewContext` function.
 
 ## `Teleporting`
 
@@ -221,11 +223,14 @@ class ChartDirective{
 createComponent({
   component: Type<C>;
   injector: Injector;
-  resolver: ComponentFactoryResolver;
+  environmentInjector: EnvironmentInjector;
+  context: Record<string, any>;
   vcr: ViewContainerRef | undefined;
   appRef: ApplicationRef | undefined;
 })
 ```
+
+If you pass `context` to a component and the value can be accessed via the `injectViewContext` function.
 
 ### `createTemplate`
 The `createTemplate` method takes a `TemplateRef`, and returns an instance of `ViewRef`.
