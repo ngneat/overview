@@ -1,7 +1,7 @@
 import {
-  ApplicationRef,
-  ComponentFactoryResolver,
-  Injectable,
+  ApplicationRef, EnvironmentInjector,
+  inject,
+  Injectable, InjectionToken,
   Injector,
   TemplateRef,
   Type,
@@ -16,27 +16,45 @@ interface _ViewOptions {
   vcr?: ViewContainerRef | undefined;
 }
 
-interface CompViewOptions extends _ViewOptions {
-  injector?: Injector | undefined;
+interface TemplateViewOptions extends _ViewOptions {
+  context?: Record<string, any> | undefined;
 }
 
-interface TemplateViewOptions extends _ViewOptions {
+interface CompViewOptions extends _ViewOptions {
+  injector?: Injector | undefined;
+  environmentInjector?: EnvironmentInjector | undefined;
   context?: Record<string, any> | undefined;
 }
 
 export type ViewOptions = _ViewOptions & CompViewOptions & TemplateViewOptions;
 
+export const VIEW_CONTEXT = new InjectionToken<Record<string, any>>('Component context');
+
 @Injectable({ providedIn: 'root' })
 export class ViewService {
-  constructor(private resolver: ComponentFactoryResolver, private injector: Injector, private appRef: ApplicationRef) {}
+  private injector = inject(Injector);
+  private appRef = inject(ApplicationRef);
+  private environmentInjector = inject(EnvironmentInjector);
 
   createComponent<C>(component: Type<C>, options: CompViewOptions = {}) {
+    let injector = options.injector || this.injector;
+
+    if (options.context) {
+      injector = Injector.create({
+        providers: [{
+          provide: VIEW_CONTEXT,
+          useValue: options.context
+        }],
+        parent: injector
+      });
+    }
+
     return new CompRef<C>({
       component,
       vcr: options.vcr,
-      injector: options.injector || this.injector,
+      injector,
       appRef: this.appRef,
-      resolver: this.resolver,
+      environmentInjector: options.environmentInjector || this.environmentInjector
     });
   }
 
@@ -64,4 +82,8 @@ export class ViewService {
       throw 'Type of content is not supported';
     }
   }
+}
+
+export function injectViewContext<T extends Record<string, any>>() {
+  return inject(VIEW_CONTEXT) as T;
 }

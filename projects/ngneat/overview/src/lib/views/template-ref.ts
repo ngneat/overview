@@ -19,7 +19,6 @@ interface Args<C> {
 export class TplRef<C> implements ViewRef {
   private viewRef: EmbeddedViewRef<{}>;
   private element: Element;
-  private wrapper: Element | null = null;
 
   constructor(private args: Args<C>) {
     if (this.args.vcr) {
