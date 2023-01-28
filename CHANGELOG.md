@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.0.1](https://github.com/ngneat/overview/compare/v4.0.0...v4.0.1) (2023-01-28)
+
+
+### Bug Fixes
+
+* 🐛 pass injector to component ref ([a9d5217](https://github.com/ngneat/overview/commit/a9d5217e7d94c0552f84ddaefd08325828883fe4))
+
 ## [4.0.0](https://github.com/ngneat/overview/compare/v3.0.4...v4.0.0) (2023-01-22)
 
 
