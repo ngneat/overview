@@ -26,6 +26,7 @@ export class CompRef<T> implements ViewRef {
       });
     } else {
       this.compRef = createComponent<T>(options.component, {
+        elementInjector: options.injector,
         environmentInjector: options.environmentInjector
       });
       options.appRef.attachView(this.compRef.hostView);
