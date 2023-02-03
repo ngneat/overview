@@ -14,6 +14,7 @@ import { CompRef } from './comp-ref';
 
 interface _ViewOptions {
   vcr?: ViewContainerRef | undefined;
+  injector?: Injector | undefined;
 }
 
 interface TemplateViewOptions extends _ViewOptions {
@@ -21,7 +22,6 @@ interface TemplateViewOptions extends _ViewOptions {
 }
 
 interface CompViewOptions<Context = any> extends _ViewOptions {
-  injector?: Injector | undefined;
   environmentInjector?: EnvironmentInjector | undefined;
   context?: Context | undefined;
 }
@@ -64,6 +64,7 @@ export class ViewService {
       appRef: this.appRef,
       tpl,
       context: options.context,
+      injector: options.injector
     });
   }
 
