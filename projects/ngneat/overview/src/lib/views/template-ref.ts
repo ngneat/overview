@@ -14,6 +14,7 @@ interface Args<C> {
   context: C;
   vcr: ViewContainerRef | undefined;
   appRef: ApplicationRef | undefined;
+  injector: Injector | undefined;
 }
 
 export class TplRef<C> implements ViewRef {
@@ -22,10 +23,10 @@ export class TplRef<C> implements ViewRef {
 
   constructor(private args: Args<C>) {
     if (this.args.vcr) {
-      this.viewRef = this.args.vcr.createEmbeddedView(this.args.tpl, this.args.context || {});
+      this.viewRef = this.args.vcr.createEmbeddedView(this.args.tpl, this.args.context || {}, { injector: args.injector });
       this.viewRef.detectChanges();
     } else {
-      this.viewRef = this.args.tpl.createEmbeddedView(this.args.context || ({} as C));
+      this.viewRef = this.args.tpl.createEmbeddedView(this.args.context || ({} as C), args.injector);
       this.viewRef.detectChanges();
       this.args.appRef.attachView(this.viewRef);
     }

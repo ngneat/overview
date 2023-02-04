@@ -249,6 +249,7 @@ createTemplate({
   context: C;
   vcr: ViewContainerRef | undefined;
   appRef: ApplicationRef | undefined;
+  injector: Injector | undefined;
 })
 ```
 
