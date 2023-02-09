@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.1.0](https://github.com/ngneat/overview/compare/v4.0.1...v4.1.0) (2023-02-09)
+
+
+### Features
+
+* 🎸 expose ref for templates ([0d848b1](https://github.com/ngneat/overview/commit/0d848b1e9ef51192fc26c013b27998fac7555690))
+* add `injector` option to the template config ([229e725](https://github.com/ngneat/overview/commit/229e725de3428efeb039cd0f0fd3816d711113f3)), closes [#17](https://github.com/ngneat/overview/issues/17)
+* add `injector` option to the template config ([d37c6e2](https://github.com/ngneat/overview/commit/d37c6e2264cba8f8764a195a67275ab47e34ce95)), closes [#17](https://github.com/ngneat/overview/issues/17)
+
 ### [4.0.1](https://github.com/ngneat/overview/compare/v4.0.0...v4.0.1) (2023-01-28)
 
 
