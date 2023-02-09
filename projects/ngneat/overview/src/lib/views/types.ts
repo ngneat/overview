@@ -31,3 +31,7 @@ export function isComponent(value: any): value is Type<any> {
 export function isString(value: any): value is string {
   return typeof value === 'string';
 }
+
+export function getViewRef<T>(value: CompRef<T> | TplRef<T>) {
+  return value instanceof CompRef ? value.ref.hostView : value.ref;
+}

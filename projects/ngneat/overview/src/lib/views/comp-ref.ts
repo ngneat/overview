@@ -16,43 +16,39 @@ interface Options<C> {
 }
 
 export class CompRef<T> implements ViewRef {
-  private compRef: ComponentRef<T>;
+  ref: ComponentRef<T>;
 
   constructor(private options: Options<T>) {
     if (options.vcr) {
-      this.compRef = options.vcr.createComponent(options.component, {
+      this.ref = options.vcr.createComponent(options.component, {
         index: options.vcr.length,
         injector: options.injector || options.vcr.injector,
       });
     } else {
-      this.compRef = createComponent<T>(options.component, {
+      this.ref = createComponent<T>(options.component, {
         elementInjector: options.injector,
         environmentInjector: options.environmentInjector
       });
-      options.appRef.attachView(this.compRef.hostView);
+      options.appRef.attachView(this.ref.hostView);
     }
   }
 
-  get ref() {
-    return this.compRef;
-  }
-
   setInput<K extends keyof ExcludeFunctions<T>>(input: K, value: T[K]) {
-    this.compRef.instance[input] = value;
+    this.ref.instance[input] = value;
 
     return this;
   }
 
   setInputs(inputs: Partial<ExcludeFunctions<T>>) {
     Object.keys(inputs).forEach((input) => {
-      this.compRef.instance[input] = inputs[input];
+      this.ref.instance[input] = inputs[input];
     });
 
     return this;
   }
 
   detectChanges() {
-    this.compRef.hostView.detectChanges();
+    this.ref.hostView.detectChanges();
     return this;
   }
 
@@ -73,12 +69,12 @@ export class CompRef<T> implements ViewRef {
   }
 
   getElement<T extends Element>(): T {
-    return this.compRef.location.nativeElement;
+    return this.ref.location.nativeElement;
   }
 
   destroy() {
-    this.compRef.destroy();
-    !this.options.vcr && this.options.appRef.detachView(this.compRef.hostView);
-    this.compRef = null;
+    this.ref.destroy();
+    !this.options.vcr && this.options.appRef.detachView(this.ref.hostView);
+    this.ref = null;
   }
 }
