@@ -71,7 +71,7 @@ export class ViewService {
   createView<T>(content: Type<T>, viewOptions: CompViewOptions): CompRef<T>;
   createView<T>(content: TemplateRef<T>, viewOptions: TemplateViewOptions): TplRef<T>;
   createView(content: string): StringRef;
-  createView(content: Content, viewOptions: ViewOptions): ViewRef;
+  createView(content: Content, viewOptions?: ViewOptions): ViewRef;
   createView<T extends Content>(content: T, viewOptions: ViewOptions = {}): ViewRef {
     if (isTemplateRef(content)) {
       return this.createTemplate(content, viewOptions);
