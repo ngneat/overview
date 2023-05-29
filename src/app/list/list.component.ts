@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject, Input, OnInit } from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, Inject, Input, OnDestroy, OnInit} from '@angular/core';
 import { TIPPY_REF } from '../tippy.service';
 import { Instance } from 'tippy.js';
 
@@ -7,11 +7,12 @@ import { Instance } from 'tippy.js';
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true
 })
-export class ListComponent implements OnInit {
-  @Input() value: string;
+export class ListComponent implements OnInit, OnDestroy {
+  tippy = inject(TIPPY_REF);
 
-  constructor(@Inject(TIPPY_REF) public tippy: Instance) {}
+  @Input() value: string;
 
   ngOnInit(): void {
     console.log('ngOnInit');

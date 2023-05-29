@@ -1,12 +1,19 @@
-import { Component, Inject, OnInit, Optional } from '@angular/core';
+import {Component, inject} from '@angular/core';
+import {injectViewContext} from "@ngneat/overview";
+import {CommonModule} from "@angular/common";
+import {NAME_TOKEN} from "../name.provider";
 
 @Component({
   selector: 'app-hello',
-  template: '{{ name }} app-hello',
+  template: `
+    <p>{{ name }} app-hello</p>
+    <p>Provided context: {{ context() | json }}</p>
+  `,
   styleUrls: ['./hello.component.scss'],
+  imports: [CommonModule],
+  standalone: true,
 })
-export class HelloComponent implements OnInit {
-  constructor(@Inject('name') public name: string) {}
-
-  ngOnInit(): void {}
+export class HelloComponent {
+  name = inject(NAME_TOKEN);
+  context = injectViewContext();
 }

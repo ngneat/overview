@@ -1,14 +1,15 @@
-import { Injectable, InjectionToken, Injector } from '@angular/core';
+import {inject, Injectable, InjectionToken, Injector} from '@angular/core';
 import tippy, { Instance, Props } from 'tippy.js';
 import { Content, isComponent, isTemplateRef, ViewOptions, ViewRef, ViewService } from '@ngneat/overview';
 
 interface CreateOptions extends Partial<Props>, ViewOptions {}
 
-export const TIPPY_REF = new InjectionToken('TIPPY_REF');
+export const TIPPY_REF = new InjectionToken<Instance>('TIPPY_REF');
 
 @Injectable({ providedIn: 'root' })
 export class TippyService {
-  constructor(private view: ViewService, private injector: Injector) {}
+  view = inject(ViewService);
+  injector = inject(Injector);
 
   create(host: Element, content: Content, options: CreateOptions): Instance {
     let view: ViewRef;
