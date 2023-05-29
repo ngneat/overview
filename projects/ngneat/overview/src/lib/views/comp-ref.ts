@@ -1,31 +1,32 @@
 import {
   ApplicationRef,
-  ComponentRef, createComponent,  EnvironmentInjector,
-  Injector,
+  ComponentRef, createComponent, EnvironmentInjector,
+  Injector, Signal,
   Type,
-  ViewContainerRef,
+  ViewContainerRef, WritableSignal,
 } from '@angular/core';
 import { ExcludeFunctions, ViewRef } from './types';
 
-interface Options<C> {
-  component: Type<C>;
+interface Options<Comp, Context> {
+  component: Type<Comp>;
   injector: Injector;
   environmentInjector: EnvironmentInjector;
   vcr: ViewContainerRef | undefined;
   appRef: ApplicationRef | undefined;
+  contextSignal?: WritableSignal<Context>;
 }
 
-export class CompRef<T> implements ViewRef {
-  ref: ComponentRef<T>;
+export class CompRef<Comp, Context = any> implements ViewRef {
+  ref: ComponentRef<Comp>;
 
-  constructor(private options: Options<T>) {
+  constructor(private options: Options<Comp, Context>) {
     if (options.vcr) {
       this.ref = options.vcr.createComponent(options.component, {
         index: options.vcr.length,
         injector: options.injector || options.vcr.injector,
       });
     } else {
-      this.ref = createComponent<T>(options.component, {
+      this.ref = createComponent<Comp>(options.component, {
         elementInjector: options.injector,
         environmentInjector: options.environmentInjector
       });
@@ -33,13 +34,13 @@ export class CompRef<T> implements ViewRef {
     }
   }
 
-  setInput<K extends keyof ExcludeFunctions<T>>(input: K, value: T[K]) {
+  setInput<K extends keyof ExcludeFunctions<Comp>>(input: K, value: Comp[K]) {
     this.ref.instance[input] = value;
 
     return this;
   }
 
-  setInputs(inputs: Partial<ExcludeFunctions<T>>) {
+  setInputs(inputs: Partial<ExcludeFunctions<Comp>>) {
     Object.keys(inputs).forEach((input) => {
       this.ref.instance[input] = inputs[input];
     });
@@ -49,6 +50,13 @@ export class CompRef<T> implements ViewRef {
 
   detectChanges() {
     this.ref.hostView.detectChanges();
+
+    return this;
+  }
+
+  updateContext(context: Context) {
+    this.options.contextSignal?.set(context);
+
     return this;
   }
 

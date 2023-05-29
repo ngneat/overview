@@ -1,32 +1,41 @@
-import { Component, ElementRef, Injector, TemplateRef, ViewChild } from '@angular/core';
+import {Component, ElementRef, inject, Injector, TemplateRef, ViewChild} from '@angular/core';
 import { TippyService } from './tippy.service';
 import { ListComponent } from './list/list.component';
 import { interval } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { HelloComponent } from './hello/hello.component';
+import {CommonModule} from "@angular/common";
+import {DynamicViewModule, TeleportModule} from "@ngneat/overview";
+import {NAME_TOKEN} from "./name.provider";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  standalone: true,
+  imports: [CommonModule, DynamicViewModule, TeleportModule, ListComponent]
 })
 export class AppComponent {
+  tippy = inject(TippyService);
+  injector = inject(Injector);
+
   @ViewChild('button', { static: true }) button: ElementRef;
   @ViewChild(TemplateRef, { static: true }) tpl: TemplateRef<any>;
+
   interval = interval(1000).pipe(finalize(() => console.log('tpl destroyed')));
   show = true;
   component = HelloComponent;
-  injector = Injector.create({
+  customInjector = Injector.create({
     providers: [
       {
-        provide: 'name',
+        provide: NAME_TOKEN,
         useValue: 'Netanel',
       },
     ],
-    parent: this.parent,
+    parent: this.injector,
   });
   str = 'Hello';
-  constructor(private tippy: TippyService, private parent: Injector) {}
+  context = 'some context';
 
   ngOnInit() {
     this.tippy.create(this.button.nativeElement, ListComponent, {
@@ -37,7 +46,7 @@ export class AppComponent {
     }, 3000);
   }
 
-  click() {
-    console.log('click from app');
+  toggleContext() {
+    this.context = this.context === 'some context' ? 'This is a different context' : 'some context';
   }
 }

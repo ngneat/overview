@@ -6,7 +6,9 @@ import { TplRef } from './template-ref';
 export interface ViewRef {
   getElement(): Element | string;
 
-  detectChanges(): void;
+  detectChanges(): ViewRef;
+
+  updateContext(context: any): ViewRef;
 
   destroy(): void;
 }
