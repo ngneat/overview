@@ -3,7 +3,7 @@
   "version": "4.1.0",
   "description": "The Template for Success in Template Management",
   "peerDependencies": {
-    "@angular/core": ">=14"
+    "@angular/core": ">=16"
   },
   "dependencies": {
     "tslib": "^2.0.0"
