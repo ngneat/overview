@@ -7,7 +7,13 @@ export class StringRef implements ViewRef {
     return this.value;
   }
 
-  detectChanges() {}
+  detectChanges() {
+    return this;
+  }
+
+  updateContext() {
+    return this;
+  }
 
   destroy() {}
 }

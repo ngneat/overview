@@ -2,10 +2,10 @@ import {
   ApplicationRef, EnvironmentInjector,
   inject,
   Injectable, InjectionToken,
-  Injector,
+  Injector, Signal, signal,
   TemplateRef,
   Type,
-  ViewContainerRef,
+  ViewContainerRef, WritableSignal,
 } from '@angular/core';
 import {Content, isComponent, isString, isTemplateRef, ViewRef} from './types';
 import { TplRef } from './template-ref';
@@ -26,9 +26,9 @@ interface CompViewOptions<Context = any> extends _ViewOptions {
   context?: Context | undefined;
 }
 
-export type ViewOptions = _ViewOptions & CompViewOptions & TemplateViewOptions;
+export type ViewOptions<Context = any> = _ViewOptions & CompViewOptions<Context> & TemplateViewOptions;
 
-export const VIEW_CONTEXT = new InjectionToken<Record<string, any>>('Component context');
+export const VIEW_CONTEXT = new InjectionToken<Signal<unknown>>('Component context');
 
 @Injectable({ providedIn: 'root' })
 export class ViewService {
@@ -37,24 +37,27 @@ export class ViewService {
   private environmentInjector = inject(EnvironmentInjector);
 
   createComponent<Comp, Context>(component: Type<Comp>, options: CompViewOptions<Context> = {}) {
-    let injector = options.injector || this.injector;
+    let injector = options.injector ?? this.injector;
+    let contextSignal: WritableSignal<Context> | undefined;
 
     if (options.context) {
+      contextSignal = signal(options.context);
       injector = Injector.create({
         providers: [{
           provide: VIEW_CONTEXT,
-          useValue: options.context
+          useValue: contextSignal.asReadonly()
         }],
         parent: injector
       });
     }
 
-    return new CompRef<Comp>({
+    return new CompRef<Comp, Context>({
       component,
       vcr: options.vcr,
       injector,
       appRef: this.appRef,
-      environmentInjector: options.environmentInjector || this.environmentInjector
+      environmentInjector: options.environmentInjector || this.environmentInjector,
+      contextSignal
     });
   }
 
@@ -68,11 +71,11 @@ export class ViewService {
     });
   }
 
-  createView<T>(content: Type<T>, viewOptions: CompViewOptions): CompRef<T>;
+  createView<Comp, Context>(content: Type<Comp>, viewOptions: CompViewOptions<Context>): CompRef<Comp, Context>;
   createView<T>(content: TemplateRef<T>, viewOptions: TemplateViewOptions): TplRef<T>;
   createView(content: string): StringRef;
   createView(content: Content, viewOptions?: ViewOptions): ViewRef;
-  createView<T extends Content>(content: T, viewOptions: ViewOptions = {}): ViewRef {
+  createView<T extends Content, Context>(content: T, viewOptions: ViewOptions<Context> = {}): ViewRef {
     if (isTemplateRef(content)) {
       return this.createTemplate(content, viewOptions);
     } else if (isComponent(content)) {
@@ -86,5 +89,5 @@ export class ViewService {
 }
 
 export function injectViewContext<T>() {
-  return inject(VIEW_CONTEXT) as T;
+  return inject(VIEW_CONTEXT) as Signal<T>;
 }

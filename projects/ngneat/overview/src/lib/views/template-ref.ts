@@ -32,6 +32,8 @@ export class TplRef<C> implements ViewRef {
 
   detectChanges() {
     this.ref.detectChanges();
+
+    return this;
   }
 
   getElement(): Element {
@@ -62,6 +64,7 @@ export class TplRef<C> implements ViewRef {
 
   updateContext(context: C) {
     this.ref.context = context;
-    this.detectChanges();
+
+    return this;
   }
 }

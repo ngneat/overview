@@ -6,7 +6,9 @@ import { TplRef } from './template-ref';
 export interface ViewRef {
   getElement(): Element | string;
 
-  detectChanges(): void;
+  detectChanges(): ViewRef;
+
+  updateContext(context: any): ViewRef;
 
   destroy(): void;
 }
@@ -34,8 +36,4 @@ export function isString(value: any): value is string {
 
 export function getViewRef<T>(value: CompRef<T> | TplRef<T>) {
   return value instanceof CompRef ? value.ref.hostView : value.ref;
-}
-
-export function isTplRef(value: any): value is TplRef<any> {
-  return value instanceof TplRef;
 }
