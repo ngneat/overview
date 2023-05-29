@@ -95,33 +95,48 @@ import { DynamicViewModule, Content } from '@ngneat/overview';
       Default view
     </div>
   `,
+  standalone: true,
+  imports: [DynamicViewModule]
 })
 export class ErrorComponent {
   @Input() view: Content | undefined;
 }
-
-
-@NgModule({
-  imports: [DynamicViewModule]
-})
-class ErrorModule {}
 ```
 You can also pass a `context` or an [`injector`](https://angular.io/api/core/Injector) as `inputs` to the directive:
 
 ```html
 <h5>Component</h5>
-<ng-container *dynamicView="component; injector: injector"></ng-container>
+<ng-container *dynamicView="component; 
+    injector: myInjector; 
+    context: { $implicit: 'my title' }"/>
 
 <h5>Template</h5>
-<ng-template #tpl let-title><b>{{ title }}</b></ng-template>
+<ng-template #tpl let-title>
+  <b>{{ title }}</b>
+</ng-template>
 
-<ng-container 
-     *dynamicView="tpl || component; 
-     context: { $implicit: 'my title' }">
-</ng-container>
+<ng-container *dynamicView="tpl; context: { $implicit: 'my title' }"/>
 ```
 
-If you pass `context` to a component and the value can be accessed via the `injectViewContext` function.
+If you pass `context` to a component and the value can be accessed via the `injectViewContext` function:
+
+```ts
+import { injectViewContext } from '@ngneat/overview';
+
+interface Context {
+  title: string;
+}
+
+@Component({
+  template: `<div>{{ context().title }}</div>`,
+  standalone: true
+})
+export class MyDynamicComponent {
+    context: Signal<Context> = injectViewContext<Context>();
+}
+```
+
+`injectViewContext` returns a readonly signal with the view's context object.
 
 ## `Teleporting`
 
@@ -141,17 +156,13 @@ import { TeleportModule } from '@ngneat/overview';
 @Component({ 
   template: `
     <div class="flex">
-      <ng-container teleportOutlet="someId"></ng-container>
+      <ng-container teleportOutlet="someId"/>
     </div>
-  `
-})
-export class FooComponent {
-}
-
-@NgModule({
+  `,
+  standalone: true,
   imports: [TeleportModule]
 })
-export class FooModule {}
+export class FooComponent {}
 ```
 
 Use the `teleportTo` directive to `teleport` the view to a specific `outlet`:
@@ -161,19 +172,16 @@ import { TeleportModule } from '@ngneat/overview';
 
 @Component({ 
   template: `
-    <section *teleportTo="someId">
+   <section *teleportTo="someId">
       {{ value }}
     </section>
-  `
+  `,
+  standalone: true,
+  imports: [TeleportModule]
 })
 export class BarComponent {
   value = '...'
 }
-
-@NgModule({
-  imports: [TeleportModule]
-})
-export class BarModule {}
 ```
 
 ## ViewService
@@ -187,9 +195,8 @@ import { ViewService, CompRef } from '@ngneat/overview';
 
 @Injectable()
 class ToastService {
+  private viewService = inject(ViewService);
   componentRef: CompRef;
-
-  constructor(private viewService: ViewService) {}
 
   init() {
    this.componentRef = this.viewService
@@ -203,32 +210,31 @@ class ToastService {
 There are cases where we want to use an Angular [component](https://netbasal.com/using-angular-components-with-third-party-libraries-522a1f33003) template in a third-party library that takes a native DOM element or a string. In this case, we can use the `getRawContent` or the `getElement` method, respectively.
 
 ```ts
-import { ViewService } from '@ngneat/overview';
+import {ViewService} from '@ngneat/overview';
 
 @Directive()
-class ChartDirective{
+class ChartDirective {
+    private viewService = inject(ViewService);
 
-  constructor(private viewService: ViewService) {}
+    createChart(color: string) {
+        const ref = this.viewService
+            .createComponent(FooTooltip)
+            .setInput('color', color)
+            .detectChanges(document.body);
 
-  createChart(color: string) {
-   const ref = this.viewService
-      .createComponent(FooTooltip)
-      .setInput('color', color)
-      .detectChanges(document.body);
+        const content = ref.getRawContent();
 
-     const content = ref.getRawContent();
+        ref.destroy();
 
-     ref.destroy();
-
-     Highcharts.chart('container', {
-      tooltip: {
-        formatter: function() {
-          return content;
-       },
-       useHTML: true
-     },
-   });
-  }
+        Highcharts.chart('container', {
+            tooltip: {
+                formatter: function () {
+                    return content;
+                },
+                useHTML: true
+            },
+        });
+    }
 }
 ```
 
@@ -236,28 +242,22 @@ class ChartDirective{
 #### `createComponent` Options
 
 ```ts
-createComponent({
-  component: Type<C>;
-  injector: Injector;
-  environmentInjector: EnvironmentInjector;
-  context: Record<string, any>;
-  vcr: ViewContainerRef | undefined;
-  appRef: ApplicationRef | undefined;
+createComponent<Comp, Context>(component: Type<Comp>, {
+  injector?: Injector,
+  environmentInjector?: EnvironmentInjector,
+  context?: Context,
+  vcr?: ViewContainerRef,
 })
 ```
-
-If you pass `context` to a component and the value can be accessed via the `injectViewContext` function.
 
 ### `createTemplate`
 The `createTemplate` method takes a `TemplateRef`, and returns an instance of `ViewRef`.
 
 ```ts
-createTemplate({
-  tpl: TemplateRef<C>;
-  context: C;
-  vcr: ViewContainerRef | undefined;
-  appRef: ApplicationRef | undefined;
-  injector: Injector | undefined;
+createTemplate<Context>(tpl: TemplateRef<Context>, {
+  context?: Context,
+  vcr?: ViewContainerRef,
+  injector?: Injector,
 })
 ```
 
@@ -269,7 +269,7 @@ import { ViewService, Content } from '@ngneat/overview';
 
 @Injectable()
 class ToastService {
-  constructor(private viewService: ViewService) {}
+  private viewService = inject(ViewService);
 
   createToast(content: Content) {
     const ref = this.viewService.createView(content);
