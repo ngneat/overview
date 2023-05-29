@@ -10,7 +10,7 @@ import {
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
-import { Content, ViewRef, isString } from '../views/types';
+import {Content, ViewRef, isString, isTplRef} from '../views/types';
 import { ViewService } from '../views/view';
 import { CompRef } from '../views/comp-ref';
 import { DynamicViewComponent } from './dynamic-view.component';
@@ -32,8 +32,17 @@ export class DynamicViewDirective implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.view && !changes.view.isFirstChange()) {
+    const viewChanged = changes.view && !changes.view.isFirstChange();
+    const contextChanged = changes.context && !changes.context.isFirstChange();
+
+    if (viewChanged) {
       this.resolveContentType();
+    } else if(contextChanged) {
+      if (isTplRef(this.viewRef)) {
+        this.viewRef.updateContext(this.context);
+      } else {
+        this.resolveContentType();
+      }
     }
   }
 

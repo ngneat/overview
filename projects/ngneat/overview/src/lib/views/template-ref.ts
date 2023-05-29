@@ -1,10 +1,8 @@
 import {
   ApplicationRef,
-  ComponentFactoryResolver,
   EmbeddedViewRef,
   Injector,
   TemplateRef,
-  Type,
   ViewContainerRef,
 } from '@angular/core';
 import { ViewRef } from './types';
@@ -60,5 +58,10 @@ export class TplRef<C> implements ViewRef {
 
     this.ref.destroy();
     this.ref = null;
+  }
+
+  updateContext(context: C) {
+    this.ref.context = context;
+    this.detectChanges();
   }
 }
