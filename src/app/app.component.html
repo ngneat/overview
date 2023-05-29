@@ -1,40 +1,52 @@
-<h1>Teleport</h1>
-<app-nav></app-nav>
+<div>
+  <h1>Teleport</h1>
 
-<button #button>Click</button>
+  <ng-template let-hide>
+    {{ interval | async }}
+    <div>Hello from tpl</div>
+    <app-list [value]="'bla'"></app-list>
+    <button (click)="hide()">Close</button>
+  </ng-template>
 
-<ng-template let-hide>
-  {{ interval | async }}
-  <div>Hello from tpl</div>
-  <app-list [value]="'bla'"></app-list>
-  <button (click)="hide()">Close</button>
-</ng-template>
+  <div *teleportTo="'test'">
+    <h3>Teleported</h3>
+    {{ interval | async }}
+  </div>
 
-<div *teleportTo="'test'">
-  <h1>Teleported</h1>
-  {{ interval | async }}
+  <ng-template teleportTo="test">
+    <h3>Teleported2</h3>
+  </ng-template>
+
+  <button (click)="show = !show">Toggle outlet</button>
+  <section teleportOutlet="test" *ngIf="show"></section>
 </div>
 
-<ng-template teleportTo="test">
-  <h1>Teleported2</h1>
-</ng-template>
+<div>
+  <h1>Dynamic View</h1>
 
-<button (click)="show = !show">Toggle outlet</button>
-<section teleportOutlet="test" *ngIf="show"></section>
+  <div class="dynamic-views">
+    <div>
+      <h3>Component</h3>
+      <ng-container *dynamicView="component; injector: injector"/>
+    </div>
 
-<h1>Dynamic View</h1>
+    <div>
+      <h3>Template</h3>
+      <ng-template #mytpl let-title>
+        <div><b>{{ title }}</b></div>
+      </ng-template>
+      <button #button (click)="toggleContext()">Toggle context</button>
+      <ng-container *dynamicView="mytpl; context: { $implicit: context }"/>
+    </div>
 
-<h5>Component</h5>
-<ng-container *dynamicView="component; injector: injector"></ng-container>
+    <div>
+      <h3>Default Tpl</h3>
+      <ng-container *dynamicView="null"> default tpl</ng-container>
+    </div>
 
-<h5>Template</h5>
-<ng-template #mytpl let-title
-  ><b>{{ title }}</b></ng-template
->
-<ng-container *dynamicView="mytpl; context: { $implicit: 'my title' }"></ng-container>
-
-<h5>Default Tpl</h5>
-<ng-container *dynamicView="null"> default tpl </ng-container>
-
-<h5>String</h5>
-<ng-container *dynamicView="str"></ng-container>
+    <div>
+      <h3>String</h3>
+      <ng-container *dynamicView="str"/>
+    </div>
+  </div>
+</div>

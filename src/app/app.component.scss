@@ -1,0 +1,11 @@
+:host {
+  display: flex;
+  padding: 16px;
+  gap: 32px;
+}
+
+.dynamic-views {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}

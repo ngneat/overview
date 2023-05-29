@@ -26,6 +26,7 @@ export class AppComponent {
     parent: this.parent,
   });
   str = 'Hello';
+  context = 'some context';
   constructor(private tippy: TippyService, private parent: Injector) {}
 
   ngOnInit() {
@@ -37,7 +38,7 @@ export class AppComponent {
     }, 3000);
   }
 
-  click() {
-    console.log('click from app');
+  toggleContext() {
+    this.context = this.context === 'some context' ? 'This is a different context' : 'some context';
   }
 }
