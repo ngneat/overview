@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.0.0](https://github.com/ngneat/overview/compare/v4.1.0...v5.0.0) (2023-05-29)
+
+
+### ⚠ BREAKING CHANGES
+
+* 🧨 The context passed to a component is now a signal
+* 🧨 peer dependency is now angular v16+
+
+### Features
+
+* 🎸 use signal to provide component context ([2b8aebb](https://github.com/ngneat/overview/commit/2b8aebb9224c1e8b4ee86d1100d1cae1c0aa8f31))
+
+
+### Bug Fixes
+
+* 🐛 update view on context change ([5f38a78](https://github.com/ngneat/overview/commit/5f38a78d15b31da82757538a864adf5a5f6ca3ce))
+
+
+* 🤖 update to angular v16 ([488187c](https://github.com/ngneat/overview/commit/488187c8b333c916b9a7ba9a2c60196eee0df604))
+
 ## [4.1.0](https://github.com/ngneat/overview/compare/v4.0.1...v4.1.0) (2023-02-09)
 
 
