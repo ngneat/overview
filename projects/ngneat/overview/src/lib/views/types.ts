@@ -18,9 +18,12 @@ type ExcludeFunctionPropertyNames<T> = {
 }[keyof T];
 
 export type ExcludeFunctions<T> = Pick<T, ExcludeFunctionPropertyNames<T>>;
-export type Content = string | TemplateRef<any> | Type<any>;
-export type ResolveViewRef<T> = T extends Type<infer Instance> ? CompRef<Instance>
-  : T extends TemplateRef<infer Context> ? TplRef<Context> : StringRef;
+export type Content = string | number | TemplateRef<any> | Type<any>;
+export type ResolveViewRef<T> = T extends Type<infer Instance>
+  ? CompRef<Instance>
+  : T extends TemplateRef<infer Context>
+  ? TplRef<Context>
+  : StringRef;
 
 export function isTemplateRef(value: any): value is TemplateRef<any> {
   return value instanceof TemplateRef;

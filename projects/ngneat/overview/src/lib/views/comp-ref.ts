@@ -1,9 +1,13 @@
 import {
   ApplicationRef,
-  ComponentRef, createComponent, EnvironmentInjector,
-  Injector, Signal,
+  ComponentRef,
+  createComponent,
+  EnvironmentInjector,
+  Injector,
+  Signal,
   Type,
-  ViewContainerRef, WritableSignal,
+  ViewContainerRef,
+  WritableSignal,
 } from '@angular/core';
 import { ExcludeFunctions, ViewRef } from './types';
 
@@ -28,21 +32,21 @@ export class CompRef<Comp, Context = any> implements ViewRef {
     } else {
       this.ref = createComponent<Comp>(options.component, {
         elementInjector: options.injector,
-        environmentInjector: options.environmentInjector
+        environmentInjector: options.environmentInjector,
       });
       options.appRef.attachView(this.ref.hostView);
     }
   }
 
   setInput<K extends keyof ExcludeFunctions<Comp>>(input: K, value: Comp[K]) {
-    this.ref.instance[input] = value;
+    this.ref.setInput(input as string, value);
 
     return this;
   }
 
   setInputs(inputs: Partial<ExcludeFunctions<Comp>>) {
     Object.keys(inputs).forEach((input) => {
-      this.ref.instance[input] = inputs[input];
+      this.ref.setInput(input, inputs[input]);
     });
 
     return this;
