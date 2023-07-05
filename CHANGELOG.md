@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.1.0](https://github.com/ngneat/overview/compare/v5.0.0...v5.1.0) (2023-07-05)
+
+
+### Features
+
+* 🎸 add inputs ([7512c83](https://github.com/ngneat/overview/commit/7512c83d454329d4a0717ff2655c1301f1a32671))
+
 ## [5.0.0](https://github.com/ngneat/overview/compare/v4.1.0...v5.0.0) (2023-05-29)
 
 
