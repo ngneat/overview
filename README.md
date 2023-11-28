@@ -25,6 +25,14 @@
     </tr>
   </thead>
   <tbody>
+      <tr>
+      <td>
+        6.x
+      </td>
+      <td>
+        >= 17
+      </td>
+    </tr>
     <tr>
       <td>
         5.x
@@ -72,9 +80,9 @@ yarn add @ngneat/overview
 - [DynamicView](#DynamicContent)
 - [Teleporting](#Teleporting)
 - [ViewService](#ViewService)
-    - [createView](#createView)
-    - [createComponent](#createComponent)
-    - [createTemplate](#createTemplate)
+  - [createView](#createView)
+  - [createComponent](#createComponent)
+  - [createTemplate](#createTemplate)
 
 ## `DynamicView`
 
@@ -87,35 +95,34 @@ Let’s say we build a generic error component. What we want is to give our cons
 - They can choose to pass their own template or component
 
 ```ts
-import { DynamicViewModule, Content } from '@ngneat/overview';
+import { DynamicViewDirective, Content } from '@ngneat/overview';
 
 @Component({
-  template: `
-    <div *dynamicView="view">
-      Default view
-    </div>
-  `,
+  template: ` <div *dynamicView="view">Default view</div> `,
   standalone: true,
-  imports: [DynamicViewModule]
+  imports: [DynamicViewDirective],
 })
 export class ErrorComponent {
   @Input() view: Content | undefined;
 }
 ```
+
 You can also pass a `context` or an [`injector`](https://angular.io/api/core/Injector) as `inputs` to the directive:
 
 ```html
 <h5>Component</h5>
-<ng-container *dynamicView="component; 
+<ng-container
+  *dynamicView="component; 
     injector: myInjector; 
-    context: { $implicit: 'my title' }"/>
+    context: { $implicit: 'my title' }"
+/>
 
 <h5>Template</h5>
 <ng-template #tpl let-title>
   <b>{{ title }}</b>
 </ng-template>
 
-<ng-container *dynamicView="tpl; context: { $implicit: 'my title' }"/>
+<ng-container *dynamicView="tpl; context: { $implicit: 'my title' }" />
 ```
 
 If you pass `context` to a component and the value can be accessed via the `injectViewContext` function:
@@ -129,10 +136,10 @@ interface Context {
 
 @Component({
   template: `<div>{{ context().title }}</div>`,
-  standalone: true
+  standalone: true,
 })
 export class MyDynamicComponent {
-    context: Signal<Context> = injectViewContext<Context>();
+  context: Signal<Context> = injectViewContext<Context>();
 }
 ```
 
@@ -140,27 +147,26 @@ export class MyDynamicComponent {
 
 ## `Teleporting`
 
-Teleporting means rendering a view at a different location from its declaration. There are two cases it might be helpful: 
+Teleporting means rendering a view at a different location from its declaration. There are two cases it might be helpful:
 
 - Avoid prop drilling to a nested component.
 - Rendering a view at another place in the DOM while keeping its context where it’s defined.
 
 You can read more about this approach in this [article](https://netbasal.com/beam-me-up-scotty-on-teleporting-templates-in-angular-a924f1a7798).
 
-
 Use the `teleportOutlet` directive to define a new `outlet`. An `outlet` is an anchor where the view will be projected as a sibling.
 
 ```typescript
-import { TeleportModule } from '@ngneat/overview';
+import { TeleportOutletDirective } from '@ngneat/overview';
 
-@Component({ 
+@Component({
   template: `
     <div class="flex">
       <ng-container teleportOutlet="someId"/>
     </div>
   `,
   standalone: true,
-  imports: [TeleportModule]
+  imports: [TeleportOutletDirective],
 })
 export class FooComponent {}
 ```
@@ -168,26 +174,28 @@ export class FooComponent {}
 Use the `teleportTo` directive to `teleport` the view to a specific `outlet`:
 
 ```typescript
-import { TeleportModule } from '@ngneat/overview';
+import { TeleportDirective } from '@ngneat/overview';
 
-@Component({ 
+@Component({
   template: `
-   <section *teleportTo="someId">
+    <section *teleportTo="someId">
       {{ value }}
     </section>
   `,
   standalone: true,
-  imports: [TeleportModule]
+  imports: [TeleportDirective],
 })
 export class BarComponent {
-  value = '...'
+  value = '...';
 }
 ```
 
 ## ViewService
-The `ViewService` provides `facade` methods to create modular views in Angular. It's been used in various projects like [hot-toast](https://github.com/ngneat/hot-toast), and [helipopper](https://github.com/ngneat/helipopper). 
+
+The `ViewService` provides `facade` methods to create modular views in Angular. It's been used in various projects like [hot-toast](https://github.com/ngneat/hot-toast), and [helipopper](https://github.com/ngneat/helipopper).
 
 ### `createComponent`
+
 The `createComponent` method takes a `Component`, and returns an instance of `CompRef`:
 
 ```ts
@@ -199,7 +207,7 @@ class ToastService {
   componentRef: CompRef;
 
   init() {
-   this.componentRef = this.viewService
+    this.componentRef = this.viewService
       .createComponent(HotToastContainerComponent)
       .setInput('defaultConfig', defaultConfig)
       .appendTo(document.body);
@@ -210,34 +218,30 @@ class ToastService {
 There are cases where we want to use an Angular [component](https://netbasal.com/using-angular-components-with-third-party-libraries-522a1f33003) template in a third-party library that takes a native DOM element or a string. In this case, we can use the `getRawContent` or the `getElement` method, respectively.
 
 ```ts
-import {ViewService} from '@ngneat/overview';
+import { ViewService } from '@ngneat/overview';
 
 @Directive()
 class ChartDirective {
-    private viewService = inject(ViewService);
+  private viewService = inject(ViewService);
 
-    createChart(color: string) {
-        const ref = this.viewService
-            .createComponent(FooTooltip)
-            .setInput('color', color)
-            .detectChanges(document.body);
+  createChart(color: string) {
+    const ref = this.viewService.createComponent(FooTooltip).setInput('color', color).detectChanges(document.body);
 
-        const content = ref.getRawContent();
+    const content = ref.getRawContent();
 
-        ref.destroy();
+    ref.destroy();
 
-        Highcharts.chart('container', {
-            tooltip: {
-                formatter: function () {
-                    return content;
-                },
-                useHTML: true
-            },
-        });
-    }
+    Highcharts.chart('container', {
+      tooltip: {
+        formatter: function () {
+          return content;
+        },
+        useHTML: true,
+      },
+    });
+  }
 }
 ```
-
 
 #### `createComponent` Options
 
@@ -251,6 +255,7 @@ createComponent<Comp, Context>(component: Type<Comp>, {
 ```
 
 ### `createTemplate`
+
 The `createTemplate` method takes a `TemplateRef`, and returns an instance of `ViewRef`.
 
 ```ts
@@ -262,6 +267,7 @@ createTemplate<Context>(tpl: TemplateRef<Context>, {
 ```
 
 ### `createView`
+
 The `createView` method takes a `Component`, a `TemplateRef` or a `string`, and creates a `View`:
 
 ```ts
@@ -277,7 +283,6 @@ class ToastService {
   }
 }
 ```
-
 
 ## Contributors ✨
 
