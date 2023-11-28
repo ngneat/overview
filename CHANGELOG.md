@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.0.0](https://github.com/ngneat/overview/compare/v5.1.1...v6.0.0) (2023-11-28)
+
+
+### ⚠ BREAKING CHANGES
+
+* 🧨 Peer deps are now angular 17 and everything is standalone
+
+### Features
+
+* 🎸 update to ng17 ([99de476](https://github.com/ngneat/overview/commit/99de476ae73e802f0fb85d531f95485d459d8481))
+
 ### [5.1.1](https://github.com/ngneat/overview/compare/v5.1.0...v5.1.1) (2023-07-05)
 
 
