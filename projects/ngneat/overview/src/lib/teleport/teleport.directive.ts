@@ -2,19 +2,19 @@ import {
   Directive,
   EmbeddedViewRef,
   Input,
-  NgModule,
   OnChanges,
   OnDestroy,
   SimpleChanges,
   TemplateRef,
+  inject,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { TeleportService } from './teleport.service';
-import { TeleportOutletDirective } from './teleport-outlet.directive';
 
 @Directive({
   selector: '[teleportTo]',
+  standalone: true,
 })
 export class TeleportDirective implements OnChanges, OnDestroy {
   @Input() teleportTo: string | null | undefined;
@@ -22,7 +22,8 @@ export class TeleportDirective implements OnChanges, OnDestroy {
   private viewRef: EmbeddedViewRef<any>;
   private subscription: Subscription | null = null;
 
-  constructor(private tpl: TemplateRef<any>, private service: TeleportService) {}
+  private tpl = inject(TemplateRef);
+  private service = inject(TeleportService);
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.teleportTo && typeof this.teleportTo === 'string') {
@@ -46,9 +47,3 @@ export class TeleportDirective implements OnChanges, OnDestroy {
     this.viewRef?.destroy();
   }
 }
-
-@NgModule({
-  declarations: [TeleportDirective, TeleportOutletDirective],
-  exports: [TeleportDirective, TeleportOutletDirective],
-})
-export class TeleportModule {}

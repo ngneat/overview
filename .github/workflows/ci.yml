@@ -18,11 +18,14 @@ jobs:
         with:
           node-version: 18
           cache: 'npm'
-          
+
       - run: npm i
 
       - name: Build library
         run: npm run build:lib
+
+      - name: Build playground
+        run: npm run build
 
   test:
     runs-on: ubuntu-latest

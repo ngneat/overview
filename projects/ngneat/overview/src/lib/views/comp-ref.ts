@@ -4,7 +4,6 @@ import {
   createComponent,
   EnvironmentInjector,
   Injector,
-  Signal,
   Type,
   ViewContainerRef,
   WritableSignal,

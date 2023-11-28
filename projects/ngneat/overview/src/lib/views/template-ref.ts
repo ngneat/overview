@@ -1,10 +1,4 @@
-import {
-  ApplicationRef,
-  EmbeddedViewRef,
-  Injector,
-  TemplateRef,
-  ViewContainerRef,
-} from '@angular/core';
+import { ApplicationRef, EmbeddedViewRef, Injector, TemplateRef, ViewContainerRef } from '@angular/core';
 import { ViewRef } from './types';
 
 interface Args<C> {
@@ -63,7 +57,7 @@ export class TplRef<C> implements ViewRef {
   }
 
   updateContext(context: C) {
-    this.ref.context = context;
+    Object.assign(this.ref.context, context);
 
     return this;
   }

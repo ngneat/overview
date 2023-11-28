@@ -2,13 +2,13 @@ import {
   Directive,
   Injector,
   Input,
-  NgModule,
   OnChanges,
   OnDestroy,
   OnInit,
   SimpleChanges,
   TemplateRef,
   ViewContainerRef,
+  inject,
 } from '@angular/core';
 import { Content, isComponent, isString, ViewRef } from '../views/types';
 import { ViewService } from '../views/view';
@@ -17,6 +17,7 @@ import { DynamicViewComponent } from './dynamic-view.component';
 
 @Directive({
   selector: '[dynamicView]',
+  standalone: true,
 })
 export class DynamicViewDirective implements OnInit, OnChanges, OnDestroy {
   @Input('dynamicView') view: Content;
@@ -25,8 +26,9 @@ export class DynamicViewDirective implements OnInit, OnChanges, OnDestroy {
   @Input('dynamicViewInputs') inputs: Record<any, any>;
 
   private viewRef: ViewRef;
-
-  constructor(private defaultTpl: TemplateRef<any>, private vcr: ViewContainerRef, private viewService: ViewService) {}
+  private defaultTpl: TemplateRef<any> = inject(TemplateRef);
+  private vcr = inject(ViewContainerRef);
+  private viewService = inject(ViewService);
 
   ngOnInit() {
     this.resolveContentType();
@@ -77,9 +79,3 @@ export class DynamicViewDirective implements OnInit, OnChanges, OnDestroy {
     this.viewRef?.destroy();
   }
 }
-
-@NgModule({
-  declarations: [DynamicViewDirective, DynamicViewComponent],
-  exports: [DynamicViewDirective],
-})
-export class DynamicViewModule {}

@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { createComponentFactory } from '@ngneat/spectator';
 
-import { TeleportModule } from './teleport.module';
+import { createComponentFactory } from '@ngneat/spectator';
+import { TeleportDirective } from './teleport.directive';
+import { TeleportOutletDirective } from './teleport-outlet.directive';
 
 describe('TeleportDirective', () => {
   describe('Synchronous behavior', () => {
@@ -17,7 +18,7 @@ describe('TeleportDirective', () => {
 
     const createComponent = createComponentFactory({
       component: TestComponent,
-      imports: [TeleportModule],
+      imports: [TeleportDirective, TeleportOutletDirective],
     });
 
     it('should render the view as sibling to the given outlet', () => {
@@ -63,7 +64,7 @@ describe('TeleportDirective', () => {
 
     const createComponent = createComponentFactory({
       component: AsynchronousTestComponent,
-      imports: [TeleportModule],
+      imports: [TeleportDirective, TeleportOutletDirective],
       declarations: [HelloComponent],
     });
 

@@ -1,7 +1,7 @@
 import { Component, Inject, Injector, Optional } from '@angular/core';
 import { fakeAsync, tick } from '@angular/core/testing';
 import { createComponentFactory, Spectator } from '@ngneat/spectator';
-import { DynamicViewModule } from './dynamic-view.directive';
+import { DynamicViewDirective } from './dynamic-view.directive';
 
 @Component({
   selector: 'app-hello',
@@ -59,7 +59,7 @@ class TestComponent {
 describe('DynamicViewDirective', () => {
   let spectator: Spectator<TestComponent>;
   const createComponent = createComponentFactory({
-    imports: [DynamicViewModule],
+    imports: [DynamicViewDirective],
     component: TestComponent,
   });
 
