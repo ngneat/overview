@@ -1,10 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'dynamic-view',
   standalone: true,
-  template: ` <div [innerHTML]="content"></div> `,
+  template: ` <div [innerHTML]="content()"></div> `,
 })
 export class DynamicViewComponent {
-  @Input() content: string;
+  readonly content = input<string>();
 }

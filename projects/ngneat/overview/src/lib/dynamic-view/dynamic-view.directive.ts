@@ -1,7 +1,6 @@
 import {
   Directive,
   Injector,
-  Input,
   OnChanges,
   OnDestroy,
   OnInit,
@@ -9,6 +8,7 @@ import {
   TemplateRef,
   ViewContainerRef,
   inject,
+  input,
 } from '@angular/core';
 import { Content, isComponent, isString, ViewRef } from '../views/types';
 import { ViewService } from '../views/view';
@@ -20,10 +20,10 @@ import { DynamicViewComponent } from './dynamic-view.component';
   standalone: true,
 })
 export class DynamicViewDirective implements OnInit, OnChanges, OnDestroy {
-  @Input('dynamicView') view: Content;
-  @Input('dynamicViewInjector') injector: Injector;
-  @Input('dynamicViewContext') context: any;
-  @Input('dynamicViewInputs') inputs: Record<any, any>;
+  readonly view = input<Content>(undefined, { alias: 'dynamicView' });
+  readonly injector = input<Injector>(undefined, { alias: 'dynamicViewInjector' });
+  readonly context = input<any>(undefined, { alias: 'dynamicViewContext' });
+  readonly inputs = input<Record<any, any>>(undefined, { alias: 'dynamicViewInputs' });
 
   private viewRef: ViewRef;
   private defaultTpl: TemplateRef<any> = inject(TemplateRef);
@@ -42,35 +42,42 @@ export class DynamicViewDirective implements OnInit, OnChanges, OnDestroy {
     if (viewChanged) {
       this.resolveContentType();
     } else if (contextChanged) {
-      this.viewRef.updateContext(this.context);
-    } else if (isComponent(this.view) && inputsChanged) {
-      (this.viewRef as CompRef<any>).setInputs(this.inputs || {});
+      this.viewRef.updateContext(this.context());
+    } else if (isComponent(this.view()) && inputsChanged) {
+      (this.viewRef as CompRef<any>).setInputs(this.inputs() || {});
     }
   }
 
   resolveContentType() {
     this.viewRef?.destroy();
-    if (isString(this.view)) {
-      this.viewRef = this.viewService.createComponent(DynamicViewComponent, {
+
+    const view = this.view();
+    const injector = this.injector();
+    const context = this.context();
+
+    if (isString(view)) {
+      const viewRef = (this.viewRef = this.viewService.createComponent(DynamicViewComponent, {
         vcr: this.vcr,
-        injector: this.injector,
-      });
-      (this.viewRef as CompRef<DynamicViewComponent>).setInput('content', this.view).detectChanges();
-    } else if (isComponent(this.view)) {
-      this.viewRef = this.viewService.createComponent(this.view, {
+        injector,
+      }));
+
+      viewRef.setInput('content', view).detectChanges();
+    } else if (isComponent(view)) {
+      this.viewRef = this.viewService.createComponent(view, {
         vcr: this.vcr,
-        injector: this.injector ?? this.vcr.injector,
-        context: this.context,
+        injector: injector ?? this.vcr.injector,
+        context,
       });
 
-      if (this.inputs) {
-        (this.viewRef as CompRef<any>).setInputs(this.inputs);
+      const inputs = this.inputs();
+      if (inputs) {
+        (this.viewRef as CompRef<any>).setInputs(inputs);
       }
     } else {
-      this.viewRef = this.viewService.createView(this.view || this.defaultTpl, {
+      this.viewRef = this.viewService.createView(view || this.defaultTpl, {
         vcr: this.vcr,
-        injector: this.injector ?? this.vcr.injector,
-        context: this.context,
+        injector: injector ?? this.vcr.injector,
+        context,
       });
     }
   }

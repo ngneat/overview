@@ -10,7 +10,10 @@ export class TeleportService {
   private asObservable = this.outlets.asObservable();
 
   outlet$(name: string) {
-    return this.asObservable.pipe(filter(current => current === name), map(name => this.ports.get(name)));
+    return this.asObservable.pipe(
+      filter((current) => current === name),
+      map((name) => this.ports.get(name))
+    );
   }
 
   ports = new Map<string, ViewContainerRef>();
