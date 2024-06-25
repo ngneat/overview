@@ -1,13 +1,18 @@
 import {
-  ApplicationRef, EnvironmentInjector,
+  ApplicationRef,
+  EnvironmentInjector,
   inject,
-  Injectable, InjectionToken,
-  Injector, Signal, signal,
+  Injectable,
+  InjectionToken,
+  Injector,
+  Signal,
+  signal,
   TemplateRef,
   Type,
-  ViewContainerRef, WritableSignal,
+  ViewContainerRef,
+  WritableSignal,
 } from '@angular/core';
-import {Content, isComponent, isString, isTemplateRef, ViewRef} from './types';
+import { Content, isComponent, isString, isTemplateRef, ViewRef } from './types';
 import { TplRef } from './template-ref';
 import { StringRef } from './string-ref';
 import { CompRef } from './comp-ref';
@@ -43,11 +48,13 @@ export class ViewService {
     if (options.context) {
       contextSignal = signal(options.context);
       injector = Injector.create({
-        providers: [{
-          provide: VIEW_CONTEXT,
-          useValue: contextSignal.asReadonly()
-        }],
-        parent: injector
+        providers: [
+          {
+            provide: VIEW_CONTEXT,
+            useValue: contextSignal.asReadonly(),
+          },
+        ],
+        parent: injector,
       });
     }
 
@@ -57,7 +64,7 @@ export class ViewService {
       injector,
       appRef: this.appRef,
       environmentInjector: options.environmentInjector || this.environmentInjector,
-      contextSignal
+      contextSignal,
     });
   }
 
@@ -67,7 +74,7 @@ export class ViewService {
       appRef: this.appRef,
       tpl,
       context: options.context,
-      injector: options.injector
+      injector: options.injector,
     });
   }
 

@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnDestroy,
+  OnInit,
+  provideExperimentalZonelessChangeDetection,
+  signal,
+} from '@angular/core';
 
 import { createComponentFactory } from '@ngneat/spectator';
 import { TeleportDirective } from './teleport.directive';
@@ -19,6 +26,7 @@ describe('TeleportDirective', () => {
     const createComponent = createComponentFactory({
       component: TestComponent,
       imports: [TeleportDirective, TeleportOutletDirective],
+      providers: [provideExperimentalZonelessChangeDetection()],
     });
 
     it('should render the view as sibling to the given outlet', () => {
@@ -33,6 +41,7 @@ describe('TeleportDirective', () => {
     @Component({
       selector: 'app-hello',
       template: '<div>Some view</div>',
+      standalone: true,
     })
     class HelloComponent implements OnInit, OnDestroy {
       ngOnInit(): void {}
@@ -41,31 +50,27 @@ describe('TeleportDirective', () => {
 
     @Component({
       template: `
-        <app-hello *teleportTo="teleportTo"></app-hello>
+        <app-hello *teleportTo="teleportTo()"></app-hello>
         <section>
-          <ng-template [teleportOutlet]="teleportTo"></ng-template>
+          <ng-template [teleportOutlet]="teleportTo()"></ng-template>
         </section>
       `,
       changeDetection: ChangeDetectionStrategy.OnPush,
+      standalone: true,
+      imports: [HelloComponent, TeleportDirective, TeleportOutletDirective],
     })
     class AsynchronousTestComponent {
-      teleportTo: string | null = null;
+      teleportTo = signal<string | null>(null);
 
-      constructor(private ref: ChangeDetectorRef) {}
-
-      setTeleportToAsynchronously(): Promise<void> {
-        return Promise.resolve().then(() => {
-          this.teleportTo = 'projectHere';
-          // Run the change detection manually since we're inside an OnPush component.
-          this.ref.detectChanges();
-        });
+      async setTeleportToAsynchronously(): Promise<void> {
+        await Promise.resolve();
+        this.teleportTo.set('projectHere');
       }
     }
 
     const createComponent = createComponentFactory({
       component: AsynchronousTestComponent,
-      imports: [TeleportDirective, TeleportOutletDirective],
-      declarations: [HelloComponent],
+      providers: [provideExperimentalZonelessChangeDetection()],
     });
 
     it('should render the view as sibling to the given outlet asynchronously', async () => {
@@ -75,6 +80,7 @@ describe('TeleportDirective', () => {
       const ngOnInitSpy = spyOn(HelloComponent.prototype, 'ngOnInit').and.callThrough();
       const ngOnDestroySpy = spyOn(HelloComponent.prototype, 'ngOnDestroy').and.callThrough();
       await spectator.component.setTeleportToAsynchronously();
+      await spectator.fixture.whenStable();
       // Assert
       expect(spectator.query('app-hello')).toExist();
       expect(spectator.query('app-hello')).toContainText('Some view');

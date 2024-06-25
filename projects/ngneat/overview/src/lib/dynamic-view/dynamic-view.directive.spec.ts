@@ -1,4 +1,4 @@
-import { Component, Inject, Injector, Optional } from '@angular/core';
+import { Component, Inject, Injector, Optional, signal } from '@angular/core';
 import { fakeAsync, tick } from '@angular/core/testing';
 import { createComponentFactory, Spectator } from '@ngneat/spectator';
 import { DynamicViewDirective } from './dynamic-view.directive';
@@ -28,7 +28,7 @@ export class HelloComponent {
 
     <section id="string">
       <h5>String</h5>
-      <ng-container *dynamicView="str"></ng-container>
+      <ng-container *dynamicView="str()"></ng-container>
     </section>
 
     <section id="defaultTpl">
@@ -48,10 +48,10 @@ class TestComponent {
     ],
     parent: this.parent,
   });
-  str = 'hello world';
+  str = signal('hello world');
   constructor(private parent: Injector) {
     setTimeout(() => {
-      this.str = 'hello';
+      this.str.set('hello');
     }, 3000);
   }
 }
