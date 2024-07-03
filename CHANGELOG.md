@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.1.0](https://github.com/ngneat/overview/compare/v6.0.0...v6.1.0) (2024-07-03)
+
+
+### Features
+
+* change to signal inputs to be zoneless compatible ([2965bda](https://github.com/ngneat/overview/commit/2965bda3267cee8735a3cfa04e2cef7734961554))
+
 ## [6.0.0](https://github.com/ngneat/overview/compare/v5.1.1...v6.0.0) (2023-11-28)
 
 
