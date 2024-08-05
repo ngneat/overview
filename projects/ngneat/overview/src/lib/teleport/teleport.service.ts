@@ -7,10 +7,9 @@ import { filter, map } from 'rxjs/operators';
 })
 export class TeleportService {
   private outlets = new BehaviorSubject<string>('');
-  private asObservable = this.outlets.asObservable();
 
   outlet$(name: string) {
-    return this.asObservable.pipe(
+    return this.outlets.pipe(
       filter((current) => current === name),
       map((name) => this.ports.get(name))
     );
