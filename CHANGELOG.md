@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.1.1](https://github.com/ngneat/overview/compare/v6.1.0...v6.1.1) (2024-08-06)
+
+
+### Bug Fixes
+
+* use `ngOnChanges` instead of `effect` to avoid signal-writes error ([e8c3d3c](https://github.com/ngneat/overview/commit/e8c3d3cf690c1f7a8ada36ce50910ec182876e57))
+
 ## [6.1.0](https://github.com/ngneat/overview/compare/v6.0.0...v6.1.0) (2024-07-03)
 
 
