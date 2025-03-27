@@ -1,4 +1,4 @@
-import { InputSignal, TemplateRef, Type, WritableSignal } from '@angular/core';
+import {  InputSignal, InputSignalWithTransform, TemplateRef, Type } from '@angular/core';
 import { CompRef } from './comp-ref';
 import { StringRef } from './string-ref';
 import { TplRef } from './template-ref';
@@ -18,7 +18,10 @@ type ExcludeFunctionPropertyNames<T> = {
   [Key in keyof T]: T[Key] extends InputSignal<any> ? Key : T[Key] extends Function ? never : Key;
 }[keyof T];
 
-export type InferInputSignalType<T> = T extends InputSignal<infer R> ? R : T;
+export type InferInputSignalType<T> = T extends InputSignalWithTransform<unknown, infer R> ? R : T extends InputSignal<infer R> ? R : T;
+export type ExtractInputTypes<T> = {
+  [Key in keyof T]: InferInputSignalType<T[Key]>;
+}
 
 export type ExcludeFunctions<T> = Pick<T, ExcludeFunctionPropertyNames<T>>;
 export type Content = string | number | TemplateRef<any> | Type<any>;

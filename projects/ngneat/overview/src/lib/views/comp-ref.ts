@@ -8,7 +8,7 @@ import {
   ViewContainerRef,
   WritableSignal,
 } from '@angular/core';
-import { ExcludeFunctions, InferInputSignalType, ViewRef } from './types';
+import { ExcludeFunctions, ExtractInputTypes, InferInputSignalType, ViewRef } from './types';
 
 interface Options<Comp, Context> {
   component: Type<Comp>;
@@ -43,7 +43,7 @@ export class CompRef<Comp, Context = any> implements ViewRef {
     return this;
   }
 
-  setInputs(inputs: Partial<ExcludeFunctions<Comp>>) {
+  setInputs(inputs: Partial<ExtractInputTypes<ExcludeFunctions<Comp>>>) {
     Object.keys(inputs).forEach((input) => {
       this.ref.setInput(input, inputs[input]);
     });
