@@ -7,6 +7,7 @@ import {
   TemplateRef,
   inject,
   input,
+  model,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 
@@ -17,7 +18,7 @@ import { TeleportService } from './teleport.service';
   standalone: true,
 })
 export class TeleportDirective implements OnChanges, OnDestroy {
-  readonly teleportTo = input<string | null | undefined>();
+  readonly teleportTo = model<string | null | undefined>();
 
   private viewRef: EmbeddedViewRef<any>;
   private subscription: Subscription | null = null;
