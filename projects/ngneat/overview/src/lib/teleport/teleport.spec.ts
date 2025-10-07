@@ -14,13 +14,14 @@ import { TeleportOutletDirective } from './teleport-outlet.directive';
 describe('TeleportDirective', () => {
   describe('Synchronous behavior', () => {
     @Component({
-      template: `
+    template: `
         <div *teleportTo="'projectHere'">Some view</div>
         <section>
           <ng-container teleportOutlet="projectHere"></ng-container>
         </section>
       `,
-    })
+    standalone: false
+})
     class TestComponent {}
 
     const createComponent = createComponentFactory({
@@ -49,16 +50,15 @@ describe('TeleportDirective', () => {
     }
 
     @Component({
-      template: `
+    template: `
         <app-hello *teleportTo="teleportTo()"></app-hello>
         <section>
           <ng-template [teleportOutlet]="teleportTo()"></ng-template>
         </section>
       `,
-      changeDetection: ChangeDetectionStrategy.OnPush,
-      standalone: true,
-      imports: [HelloComponent, TeleportDirective, TeleportOutletDirective],
-    })
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [HelloComponent, TeleportDirective, TeleportOutletDirective]
+})
     class AsynchronousTestComponent {
       teleportTo = signal<string | null>(null);
 

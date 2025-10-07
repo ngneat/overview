@@ -1,7 +1,7 @@
-import {Component, inject} from '@angular/core';
-import {injectViewContext} from "@ngneat/overview";
-import {CommonModule} from "@angular/common";
-import {NAME_TOKEN} from "../name.provider";
+import { Component, inject } from '@angular/core';
+import { injectViewContext } from '@ngneat/overview';
+import { JsonPipe } from '@angular/common';
+import { NAME_TOKEN } from '../name.provider';
 
 @Component({
   selector: 'app-hello',
@@ -10,8 +10,7 @@ import {NAME_TOKEN} from "../name.provider";
     <p>Provided context: {{ context() | json }}</p>
   `,
   styleUrls: ['./hello.component.scss'],
-  imports: [CommonModule],
-  standalone: true,
+  imports: [JsonPipe],
 })
 export class HelloComponent {
   name = inject(NAME_TOKEN);

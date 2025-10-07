@@ -9,11 +9,10 @@ import { DynamicViewDirective, TeleportDirective, TeleportOutletDirective } from
 import { NAME_TOKEN } from './name.provider';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
-  standalone: true,
-  imports: [CommonModule, DynamicViewDirective, TeleportOutletDirective, TeleportDirective, ListComponent],
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    imports: [CommonModule, DynamicViewDirective, TeleportOutletDirective, TeleportDirective, ListComponent]
 })
 export class AppComponent {
   tippy = inject(TippyService);

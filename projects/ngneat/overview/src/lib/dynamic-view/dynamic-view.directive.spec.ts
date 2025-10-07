@@ -36,6 +36,7 @@ export class HelloComponent {
       <ng-container *dynamicView="null"> default tpl </ng-container>
     </section>
   `,
+  standalone: false,
 })
 class TestComponent {
   component = HelloComponent;
