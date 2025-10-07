@@ -3,7 +3,7 @@ import {
   Component,
   OnDestroy,
   OnInit,
-  provideExperimentalZonelessChangeDetection,
+  provideZonelessChangeDetection,
   signal,
 } from '@angular/core';
 
@@ -14,20 +14,20 @@ import { TeleportOutletDirective } from './teleport-outlet.directive';
 describe('TeleportDirective', () => {
   describe('Synchronous behavior', () => {
     @Component({
-    template: `
+      template: `
         <div *teleportTo="'projectHere'">Some view</div>
         <section>
           <ng-container teleportOutlet="projectHere"></ng-container>
         </section>
       `,
-    standalone: false
-})
+      standalone: false,
+    })
     class TestComponent {}
 
     const createComponent = createComponentFactory({
       component: TestComponent,
       imports: [TeleportDirective, TeleportOutletDirective],
-      providers: [provideExperimentalZonelessChangeDetection()],
+      providers: [provideZonelessChangeDetection()],
     });
 
     it('should render the view as sibling to the given outlet', () => {
@@ -50,15 +50,15 @@ describe('TeleportDirective', () => {
     }
 
     @Component({
-    template: `
+      template: `
         <app-hello *teleportTo="teleportTo()"></app-hello>
         <section>
           <ng-template [teleportOutlet]="teleportTo()"></ng-template>
         </section>
       `,
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [HelloComponent, TeleportDirective, TeleportOutletDirective]
-})
+      changeDetection: ChangeDetectionStrategy.OnPush,
+      imports: [HelloComponent, TeleportDirective, TeleportOutletDirective],
+    })
     class AsynchronousTestComponent {
       teleportTo = signal<string | null>(null);
 
@@ -70,7 +70,7 @@ describe('TeleportDirective', () => {
 
     const createComponent = createComponentFactory({
       component: AsynchronousTestComponent,
-      providers: [provideExperimentalZonelessChangeDetection()],
+      providers: [provideZonelessChangeDetection()],
     });
 
     it('should render the view as sibling to the given outlet asynchronously', async () => {
