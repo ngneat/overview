@@ -1,23 +1,12 @@
-import {
-  Directive,
-  EmbeddedViewRef,
-  OnChanges,
-  OnDestroy,
-  SimpleChanges,
-  TemplateRef,
-  inject,
-  input,
-  model,
-} from '@angular/core';
+import { Directive, EmbeddedViewRef, TemplateRef, effect, inject, model } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { TeleportService } from './teleport.service';
 
 @Directive({
   selector: '[teleportTo]',
-  standalone: true,
 })
-export class TeleportDirective implements OnChanges, OnDestroy {
+export class TeleportDirective {
   readonly teleportTo = model<string | null | undefined>();
 
   private viewRef: EmbeddedViewRef<any>;
@@ -26,24 +15,23 @@ export class TeleportDirective implements OnChanges, OnDestroy {
   private tpl = inject(TemplateRef);
   private service = inject(TeleportService);
 
-  ngOnChanges(changes: SimpleChanges): void {
-    // Note: Do not use `effect` to observe changes to `teleportTo`, as
-    // this would result in running `createEmbeddedView` within that effect.
-    // `createEmbeddedView` may create a component whose constructor might
-    // trigger another effect or write to some signals, given that we are
-    // operating within a reactive context.
-    if (changes.teleportTo && typeof this.teleportTo() === 'string') {
-      this.dispose();
+  constructor() {
+    effect(() => {
+      const teleportTo = this.teleportTo();
 
-      this.subscription = this.service.outlet$(this.teleportTo()).subscribe((outlet) => {
-        if (outlet) {
-          this.viewRef = outlet.createEmbeddedView(this.tpl);
-        }
-      });
-    }
+      if (!!teleportTo) {
+        this.dispose();
+
+        this.subscription = this.service.outlet$(teleportTo).subscribe((outlet) => {
+          if (outlet) {
+            this.viewRef = outlet.createEmbeddedView(this.tpl);
+          }
+        });
+      }
+    });
   }
 
-  ngOnDestroy(): void {
+  ngOnDestroy() {
     this.dispose();
   }
 

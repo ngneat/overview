@@ -17,7 +17,6 @@ import { DynamicViewComponent } from './dynamic-view.component';
 
 @Directive({
   selector: '[dynamicView]',
-  standalone: true,
 })
 export class DynamicViewDirective implements OnInit, OnChanges, OnDestroy {
   readonly view = input<Content>(undefined, { alias: 'dynamicView' });
