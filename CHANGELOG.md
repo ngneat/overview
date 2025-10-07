@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.0.0](https://github.com/ngneat/overview/compare/v6.2.0...v7.0.0) (2025-10-07)
+
+
+### ⚠ BREAKING CHANGES
+
+* 🧨 min Angular version is v20
+
+### Features
+
+* 🎸 upgrade to ng20 and use zoneless ([a6c46d0](https://github.com/ngneat/overview/commit/a6c46d0d15d8455be739bc52c7542dfb2319d61f))
+
+
+### Bug Fixes
+
+* 🐛 use effect in teleport ([1b4fa7b](https://github.com/ngneat/overview/commit/1b4fa7b6313c02fcd284d84cd130503c72a121e6))
+
 ## [6.2.0](https://github.com/ngneat/overview/compare/v6.1.2...v6.2.0) (2025-10-06)
 
 

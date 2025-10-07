@@ -1,6 +1,6 @@
 {
   "name": "@ngneat/overview",
-  "version": "6.2.0",
+  "version": "7.0.0",
   "description": "The Template for Success in Template Management",
   "peerDependencies": {
     "@angular/core": ">=20"
