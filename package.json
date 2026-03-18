@@ -1,6 +1,7 @@
 {
   "name": "overview-playground",
   "version": "0.0.0",
+  "packageManager": "pnpm@10.32.1",
   "scripts": {
     "start": "ng serve",
     "build": "ng build",
@@ -10,7 +11,7 @@
     "build:lib": "ng build @ngneat/overview --configuration production && cp -r README.md dist/ngneat/overview",
     "test:lib": "ng test @ngneat/overview",
     "release": "cd projects/ngneat/overview && standard-version --infile ../../../CHANGELOG.md",
-    "test:lib:headless": "cross-env CI=true npm run test:lib"
+    "test:lib:headless": "cross-env CI=true pnpm test:lib"
   },
   "private": true,
   "dependencies": {
@@ -24,7 +25,8 @@
     "@angular/router": "^20.3.3",
     "rxjs": "~6.6.0",
     "tippy.js": "^6.2.7",
-    "tslib": "^2.3.1"
+    "tslib": "^2.3.1",
+    "zone.js": "^0.16.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^20.3.4",

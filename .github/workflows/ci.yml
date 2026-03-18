@@ -11,35 +11,41 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
 
       - name: Node setup
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v6
         with:
-          node-version: 18
-          cache: 'npm'
+          node-version: 22
 
-      - run: npm i
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.32.1
+
+      - run: pnpm install --frozen-lockfile
 
       - name: Build library
-        run: npm run build:lib
+        run: pnpm build:lib
 
       - name: Build playground
-        run: npm run build
+        run: pnpm build
 
   test:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
 
       - name: Node setup
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v6
         with:
-          node-version: 18
-          cache: 'npm'
+          node-version: 22
 
-      - run: npm i
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.32.1
+
+      - run: pnpm install --frozen-lockfile
 
       - name: Test library
-        run: npm run test:lib:headless
+        run: pnpm test:lib:headless
