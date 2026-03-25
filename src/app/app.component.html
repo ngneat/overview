@@ -4,7 +4,7 @@
   <ng-template let-hide>
     {{ interval | async }}
     <div>Hello from tpl</div>
-    <app-list [value]="'bla'"/>
+    <app-list [value]="'bla'" />
     <button (click)="hide()">Close</button>
   </ng-template>
 
@@ -18,7 +18,9 @@
   </ng-template>
 
   <button class="my-4" (click)="show = !show">Toggle outlet</button>
-  <section teleportOutlet="test" *ngIf="show"></section>
+  @if (show) {
+    <section teleportOutlet="test"></section>
+  }
 </div>
 
 <div>
@@ -29,15 +31,17 @@
   <div class="dynamic-views">
     <div>
       <h3>Component</h3>
-      <ng-container *dynamicView="component; injector: customInjector; context: { $implicit: context }"/>
+      <ng-container *dynamicView="component; injector: customInjector; context: { $implicit: context }" />
     </div>
 
     <div>
       <h3>Template</h3>
       <ng-template #mytpl let-title>
-        <div><b>{{ title }}</b></div>
+        <div>
+          <b>{{ title }}</b>
+        </div>
       </ng-template>
-      <ng-container *dynamicView="mytpl; context: { $implicit: context }"/>
+      <ng-container *dynamicView="mytpl; context: { $implicit: context }" />
     </div>
 
     <div>
@@ -47,7 +51,7 @@
 
     <div>
       <h3>String</h3>
-      <ng-container *dynamicView="str"/>
+      <ng-container *dynamicView="str" />
     </div>
   </div>
 </div>

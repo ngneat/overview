@@ -11,27 +11,27 @@
     "build:lib": "ng build @ngneat/overview --configuration production && cp -r README.md dist/ngneat/overview",
     "test:lib": "ng test @ngneat/overview",
     "release": "cd projects/ngneat/overview && standard-version --infile ../../../CHANGELOG.md",
-    "test:lib:headless": "cross-env CI=true pnpm test:lib"
+    "test:lib:headless": "ng test @ngneat/overview --watch=false --browsers=ChromeHeadless"
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^20.3.3",
-    "@angular/common": "^20.3.3",
-    "@angular/compiler": "^20.3.3",
-    "@angular/core": "^20.3.3",
-    "@angular/forms": "^20.3.3",
-    "@angular/platform-browser": "^20.3.3",
-    "@angular/platform-browser-dynamic": "^20.3.3",
-    "@angular/router": "^20.3.3",
+    "@angular/animations": "^21.2.5",
+    "@angular/common": "^21.2.5",
+    "@angular/compiler": "^21.2.5",
+    "@angular/core": "^21.2.5",
+    "@angular/forms": "^21.2.5",
+    "@angular/platform-browser": "^21.2.5",
+    "@angular/platform-browser-dynamic": "^21.2.5",
+    "@angular/router": "^21.2.5",
     "rxjs": "~6.6.0",
     "tippy.js": "^6.2.7",
     "tslib": "^2.3.1",
     "zone.js": "^0.16.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^20.3.4",
-    "@angular/cli": "^20.3.4",
-    "@angular/compiler-cli": "^20.3.3",
+    "@angular/build": "^21.2.3",
+    "@angular/cli": "^21.2.3",
+    "@angular/compiler-cli": "^21.2.5",
     "@commitlint/cli": "11.0.0",
     "@commitlint/config-angular": "11.0.0",
     "@commitlint/config-conventional": "11.0.0",
@@ -51,10 +51,10 @@
     "karma-jasmine": "^5.1.0",
     "karma-jasmine-html-reporter": "^2.0.0",
     "lint-staged": "10.5.3",
-    "ng-packagr": "^20.3.0",
+    "ng-packagr": "^21.2.1",
     "prettier": "3.8.1",
     "standard-version": "9.0.0",
-    "typescript": "~5.8.3"
+    "typescript": "~5.9.3"
   },
   "config": {
     "commitizen": {
