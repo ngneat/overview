@@ -9,6 +9,7 @@ import {
   signal,
   TemplateRef,
   Type,
+  untracked,
   ViewContainerRef,
   WritableSignal,
 } from '@angular/core';
@@ -44,7 +45,7 @@ export class ViewUnsupportedContentTypeError extends Error {
 // injection token lets the component pull context from its injector without coupling
 // to the caller's API or requiring a shared base class.
 export const VIEW_CONTEXT = new InjectionToken<Signal<unknown>>(
-  typeof ngDevMode !== 'undefined' && ngDevMode ? 'Component context' : ''
+  typeof ngDevMode !== 'undefined' && ngDevMode ? 'Component context' : '',
 );
 
 @Injectable({ providedIn: 'root' })
@@ -54,41 +55,45 @@ export class ViewService {
   private environmentInjector = inject(EnvironmentInjector);
 
   createComponent<Comp, Context>(component: Type<Comp>, options: CompViewOptions<Context> = {}) {
-    let injector = options.injector ?? this.injector;
-    let contextSignal: WritableSignal<Context> | undefined;
+    return untracked(() => {
+      let injector = options.injector ?? this.injector;
+      let contextSignal: WritableSignal<Context> | undefined;
 
-    if (options.context) {
-      contextSignal = signal(options.context);
-      // Wrap the context in a child injector so the VIEW_CONTEXT token is only visible
-      // to this component and its descendants — not leaked into the broader injector tree.
-      injector = Injector.create({
-        providers: [
-          {
-            provide: VIEW_CONTEXT,
-            useValue: contextSignal.asReadonly(),
-          },
-        ],
-        parent: injector,
+      if (options.context) {
+        contextSignal = signal(options.context);
+        // Wrap the context in a child injector so the VIEW_CONTEXT token is only visible
+        // to this component and its descendants — not leaked into the broader injector tree.
+        injector = Injector.create({
+          providers: [
+            {
+              provide: VIEW_CONTEXT,
+              useValue: contextSignal.asReadonly(),
+            },
+          ],
+          parent: injector,
+        });
+      }
+
+      return new CompRef<Comp, Context>({
+        component,
+        vcr: options.vcr,
+        injector,
+        appRef: this.appRef,
+        environmentInjector: options.environmentInjector || this.environmentInjector,
+        contextSignal,
       });
-    }
-
-    return new CompRef<Comp, Context>({
-      component,
-      vcr: options.vcr,
-      injector,
-      appRef: this.appRef,
-      environmentInjector: options.environmentInjector || this.environmentInjector,
-      contextSignal,
     });
   }
 
   createTemplate<Context>(tpl: TemplateRef<Context>, options: TemplateViewOptions = {}) {
-    return new TplRef({
-      vcr: options.vcr,
-      appRef: this.appRef,
-      tpl,
-      context: options.context,
-      injector: options.injector,
+    return untracked(() => {
+      return new TplRef({
+        vcr: options.vcr,
+        appRef: this.appRef,
+        tpl,
+        context: options.context,
+        injector: options.injector,
+      });
     });
   }
 
@@ -100,15 +105,17 @@ export class ViewService {
   createView(content: string): StringRef;
   createView(content: Content, viewOptions?: ViewOptions): ViewRef;
   createView<T extends Content, Context>(content: T, viewOptions: ViewOptions<Context> = {}): ViewRef {
-    if (isTemplateRef(content)) {
-      return this.createTemplate(content, viewOptions);
-    } else if (isComponent(content)) {
-      return this.createComponent(content, viewOptions);
-    } else if (isString(content)) {
-      return new StringRef(content);
-    } else {
-      throw new ViewUnsupportedContentTypeError();
-    }
+    return untracked(() => {
+      if (isTemplateRef(content)) {
+        return this.createTemplate(content, viewOptions);
+      } else if (isComponent(content)) {
+        return this.createComponent(content, viewOptions);
+      } else if (isString(content)) {
+        return new StringRef(content);
+      } else {
+        throw new ViewUnsupportedContentTypeError();
+      }
+    });
   }
 }
 
