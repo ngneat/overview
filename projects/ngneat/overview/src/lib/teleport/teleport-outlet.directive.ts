@@ -1,4 +1,4 @@
-import { Directive, OnDestroy, ViewContainerRef, effect, inject, input } from '@angular/core';
+import { DestroyRef, Directive, ViewContainerRef, effect, inject, input } from '@angular/core';
 import { TeleportService } from './teleport.service';
 
 @Directive({
@@ -17,9 +17,9 @@ export class TeleportOutletDirective {
         this.service.newOutlet(teleportOutlet);
       }
     });
-  }
 
-  ngOnDestroy() {
-    this.service.ports.delete(this.teleportOutlet());
+    inject(DestroyRef).onDestroy(() => {
+      this.service.ports.delete(this.teleportOutlet());
+    });
   }
 }

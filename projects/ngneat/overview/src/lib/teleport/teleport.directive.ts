@@ -1,4 +1,4 @@
-import { Directive, EmbeddedViewRef, TemplateRef, effect, inject, model } from '@angular/core';
+import { DestroyRef, Directive, EmbeddedViewRef, TemplateRef, effect, inject, model } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { TeleportService } from './teleport.service';
@@ -18,21 +18,20 @@ export class TeleportDirective {
   constructor() {
     effect(() => {
       const teleportTo = this.teleportTo();
+      if (!teleportTo) return;
 
-      if (!!teleportTo) {
-        this.dispose();
+      this.dispose();
 
-        this.subscription = this.service.outlet$(teleportTo).subscribe((outlet) => {
-          if (outlet) {
-            this.viewRef = outlet.createEmbeddedView(this.tpl);
-          }
-        });
-      }
+      this.subscription = this.service.outlet$(teleportTo).subscribe((outlet) => {
+        if (outlet) {
+          this.viewRef = outlet.createEmbeddedView(this.tpl);
+        }
+      });
     });
-  }
 
-  ngOnDestroy() {
-    this.dispose();
+    inject(DestroyRef).onDestroy(() => {
+      this.dispose();
+    });
   }
 
   private dispose(): void {
