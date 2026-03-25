@@ -191,6 +191,59 @@ export class BarComponent {
 }
 ```
 
+### Testing Teleported Components
+
+When the outlet and the teleporting content live in different components (the common real-world case), the trick is to declare both components in the same test and render the parent that hosts the outlet.
+
+```ts
+import { Component } from '@angular/core';
+import { provideZonelessChangeDetection } from '@angular/core';
+import { createComponentFactory } from '@ngneat/spectator';
+import { TeleportDirective, TeleportOutletDirective } from '@ngneat/overview';
+
+// The shell that owns the outlet — mirrors your real AppComponent / layout.
+@Component({
+  selector: 'app-shell',
+  template: `
+    <header>
+      <ng-container teleportOutlet="app-title"></ng-container>
+    </header>
+    <ng-content />
+  `,
+  imports: [TeleportOutletDirective],
+})
+class ShellComponent {}
+
+// The page that teleports content into the outlet.
+@Component({
+  template: `
+    <app-shell>
+      <h1 *teleportTo="'app-title'">My Page</h1>
+      <p>Page body</p>
+    </app-shell>
+  `,
+  imports: [ShellComponent, TeleportDirective],
+})
+class PageComponent {}
+
+describe('PageComponent', () => {
+  const createComponent = createComponentFactory({
+    component: PageComponent,
+    providers: [provideZonelessChangeDetection()],
+  });
+
+  it('should teleport the title into the shell header', () => {
+    const spectator = createComponent();
+    expect(spectator.query('header')).toHaveText('My Page');
+  });
+});
+```
+
+The key points:
+- **Render the page component**, not the shell — the page is the unit under test.
+- **Import the shell** inside the page's `imports` array so Angular compiles both together. Both the `teleportOutlet` and `*teleportTo` directives are active in the same test.
+- Both outlets register before the `*teleportTo` subscribes. This is safe — the service checks current ports on subscription, so no events are missed regardless of registration order.
+
 ## ViewService
 
 The `ViewService` provides `facade` methods to create modular views in Angular. It's been used in various projects like [hot-toast](https://github.com/ngneat/hot-toast), and [helipopper](https://github.com/ngneat/helipopper).
