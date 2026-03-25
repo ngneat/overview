@@ -1,6 +1,6 @@
 import { Injectable, ViewContainerRef } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, startWith } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -10,6 +10,11 @@ export class TeleportService {
 
   outlet$(name: string) {
     return this.outlets.pipe(
+      // Immediately check current ports on subscription so that a teleportTo
+      // registered after its outlet doesn't miss the already-emitted newOutlet event.
+      // Without this, BehaviorSubject only replays one name, so only the last
+      // registered outlet is visible to new subscribers.
+      startWith(name),
       filter((current) => current === name),
       map((name) => this.ports.get(name))
     );

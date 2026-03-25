@@ -104,6 +104,45 @@ describe('TeleportDirective', () => {
     });
   });
 
+  describe('Multiple outlets registered before teleportTo subscribes', () => {
+    // Regression: BehaviorSubject replays only the last emitted outlet name, so when
+    // two outlets are registered ('title' and 'actions'), a teleportTo for 'title'
+    // would never receive the outlet because 'actions' was emitted last.
+    // The fix (startWith) ensures each subscription immediately checks current ports.
+    @Component({
+      selector: 'app-shell',
+      template: `
+        <header><ng-container teleportOutlet="title"></ng-container></header>
+        <nav><ng-container teleportOutlet="actions"></ng-container></nav>
+        <ng-content />
+      `,
+      imports: [TeleportOutletDirective],
+    })
+    class ShellComponent {}
+
+    @Component({
+      template: `
+        <app-shell>
+          <span *teleportTo="'title'">page title</span>
+          <span *teleportTo="'actions'">page actions</span>
+        </app-shell>
+      `,
+      imports: [ShellComponent, TeleportDirective],
+    })
+    class PageComponent {}
+
+    const createComponent = createComponentFactory({
+      component: PageComponent,
+      providers: [provideZonelessChangeDetection()],
+    });
+
+    it('should render content in both outlets even though they were registered before teleportTo subscribed', () => {
+      const spectator = createComponent();
+      expect(spectator.query('header')).toHaveText('page title');
+      expect(spectator.query('nav')).toHaveText('page actions');
+    });
+  });
+
   describe('Multiple sources teleporting to the same outlet', () => {
     @Component({
       template: `
