@@ -71,8 +71,9 @@
 ## Installation
 
 ```bash
-npm i @ngneat/overview
+npm install @ngneat/overview
 yarn add @ngneat/overview
+pnpm install @ngneat/overview
 ```
 
 ## Table of Contents

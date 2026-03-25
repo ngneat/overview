@@ -1,0 +1,7 @@
+onlyBuiltDependencies:
+  - husky
+  - esbuild
+  - '@parcel/watcher'
+
+ignoredBuildDependencies:
+  - '@scarf/scarf'

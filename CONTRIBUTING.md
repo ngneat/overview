@@ -7,26 +7,26 @@
 Start by installing all dependencies:
 
 ```bash
-npm i
+pnpm install --frozen-lockfile
 ```
 
 Run the tests:
 
 ```bash
-npm test
-npm run e2e
+pnpm test
+pnpm run e2e
 ```
 
 Run the playground app:
 
 ```bash
-npm start
+pnpm start
 ```
 
 ## Building
 
 ```bash
-npm run build
+pnpm run build
 ```
 
 ## <a name="rules"></a> Coding Rules
