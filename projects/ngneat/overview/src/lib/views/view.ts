@@ -33,7 +33,19 @@ interface CompViewOptions<Context = any> extends _ViewOptions {
 
 export type ViewOptions<Context = any> = _ViewOptions & CompViewOptions<Context> & TemplateViewOptions;
 
-export const VIEW_CONTEXT = new InjectionToken<Signal<unknown>>('Component context');
+export class ViewUnsupportedContentTypeError extends Error {
+  constructor() {
+    super(typeof ngDevMode !== 'undefined' && ngDevMode ? 'Type of content is not supported' : '');
+  }
+}
+
+// Components rendered dynamically often need external data but can't receive it via
+// @Input() because they're instantiated programmatically, not by a template. An
+// injection token lets the component pull context from its injector without coupling
+// to the caller's API or requiring a shared base class.
+export const VIEW_CONTEXT = new InjectionToken<Signal<unknown>>(
+  typeof ngDevMode !== 'undefined' && ngDevMode ? 'Component context' : ''
+);
 
 @Injectable({ providedIn: 'root' })
 export class ViewService {
@@ -47,6 +59,8 @@ export class ViewService {
 
     if (options.context) {
       contextSignal = signal(options.context);
+      // Wrap the context in a child injector so the VIEW_CONTEXT token is only visible
+      // to this component and its descendants — not leaked into the broader injector tree.
       injector = Injector.create({
         providers: [
           {
@@ -78,6 +92,9 @@ export class ViewService {
     });
   }
 
+  // Overloads exist to preserve the specific return type based on the content passed in,
+  // so callers get CompRef<MyComp> or TplRef<Context> rather than just ViewRef — enabling
+  // typed input setting and context updates without casting.
   createView<Comp, Context>(content: Type<Comp>, viewOptions: CompViewOptions<Context>): CompRef<Comp, Context>;
   createView<T>(content: TemplateRef<T>, viewOptions: TemplateViewOptions): TplRef<T>;
   createView(content: string): StringRef;
@@ -90,11 +107,13 @@ export class ViewService {
     } else if (isString(content)) {
       return new StringRef(content);
     } else {
-      throw 'Type of content is not supported';
+      throw new ViewUnsupportedContentTypeError();
     }
   }
 }
 
+// Convenience wrapper so dynamically-rendered components don't need to know about
+// the internal VIEW_CONTEXT token — they just call injectViewContext<MyContext>().
 export function injectViewContext<T>() {
   return inject(VIEW_CONTEXT) as Signal<T>;
 }

@@ -24,11 +24,16 @@ export class CompRef<Comp, Context = any> implements ViewRef {
 
   constructor(private options: Options<Comp, Context>) {
     if (options.vcr) {
+      // Creating through a ViewContainerRef inserts the component into the existing
+      // Angular view tree, so it participates in the host's change detection naturally.
       this.ref = options.vcr.createComponent(options.component, {
         index: options.vcr.length,
         injector: options.injector || options.vcr.injector,
       });
     } else {
+      // Without a ViewContainerRef the component is created detached from any view tree.
+      // Attaching to ApplicationRef keeps it inside Angular's change detection cycle so
+      // it still updates — otherwise the view would be permanently stale.
       this.ref = createComponent<Comp>(options.component, {
         elementInjector: options.injector,
         environmentInjector: options.environmentInjector,
@@ -58,6 +63,8 @@ export class CompRef<Comp, Context = any> implements ViewRef {
   }
 
   updateContext(context: Context) {
+    // Context is held in a signal so the component can react to updates reactively
+    // without requiring an explicit change detection call from the outside.
     this.options.contextSignal?.set(context);
 
     return this;
@@ -85,6 +92,9 @@ export class CompRef<Comp, Context = any> implements ViewRef {
 
   destroy() {
     this.ref.destroy();
+    // When there's no ViewContainerRef we manually attached to ApplicationRef,
+    // so we must also manually detach — otherwise Angular keeps running change
+    // detection on a destroyed view, causing errors.
     !this.options.vcr && this.options.appRef.detachView(this.ref.hostView);
     this.ref = null;
   }
