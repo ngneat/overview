@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [8.0.0](https://github.com/ngneat/overview/compare/v7.0.0...v8.0.0) (2026-03-26)
+
+
+### ⚠ BREAKING CHANGES
+
+* min Angular version is v21
+
+### Features
+
+* upgrade to Angular 21 and migrate to @angular/build ([a3a1005](https://github.com/ngneat/overview/commit/a3a1005))
+
+### Bug Fixes
+
+* teleport renders all outlets when multiple are registered before navigation (#31) ([4638934](https://github.com/ngneat/overview/commit/4638934))
+
+### Build
+
+* switch to pnpm ([bd2ff79](https://github.com/ngneat/overview/commit/bd2ff79))
+
 ## [7.0.0](https://github.com/ngneat/overview/compare/v6.2.0...v7.0.0) (2025-10-07)
 
 
