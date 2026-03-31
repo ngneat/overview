@@ -239,6 +239,46 @@ describe('TeleportDirective', () => {
     });
   });
 
+  describe('Content duplication regression (v8.0.0)', () => {
+    // Regression: when the outlet is already registered by the time teleportTo
+    // subscribes, outlet$() emits twice synchronously — once from startWith() and
+    // once from the BehaviorSubject replaying its current value — both matching the
+    // filter, causing createEmbeddedView to be called twice (content duplicated).
+    @Component({
+      template: `
+        <section>
+          <ng-container teleportOutlet="dup-outlet"></ng-container>
+        </section>
+        <div *teleportTo="'dup-outlet'">content</div>
+      `,
+      imports: [TeleportDirective, TeleportOutletDirective],
+    })
+    class TestComponent {}
+
+    const createComponent = createComponentFactory({
+      component: TestComponent,
+      providers: [provideZonelessChangeDetection()],
+    });
+
+    it('should render teleported content exactly once on first render, not twice', () => {
+      const spectator = createComponent();
+      const divs = spectator.query('section')!.querySelectorAll('div');
+      expect(divs.length).toBe(1);
+    });
+
+    it('should not add content again when the component is recreated (simulated route revisit)', () => {
+      // First visit
+      const spectator1 = createComponent();
+      spectator1.fixture.destroy();
+
+      // Second visit — TeleportService is still alive (providedIn: root), BehaviorSubject
+      // still holds the last outlet name, so the duplicate-emission bug fires again.
+      const spectator2 = createComponent();
+      const divs = spectator2.query('section')!.querySelectorAll('div');
+      expect(divs.length).toBe(1);
+    });
+  });
+
   describe('Asynchronous behavior', () => {
     @Component({
       selector: 'app-hello',
