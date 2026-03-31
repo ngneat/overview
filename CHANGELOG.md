@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [8.0.1](https://github.com/ngneat/overview/compare/v8.0.0...v8.0.1) (2026-03-31)
+
+
+### Bug Fixes
+
+* teleport content duplicated on first render and on route revisit due to double outlet emission ([8390726](https://github.com/ngneat/overview/commit/8390726))
+
 ## [8.0.0](https://github.com/ngneat/overview/compare/v7.0.0...v8.0.0) (2026-03-26)
 
 
