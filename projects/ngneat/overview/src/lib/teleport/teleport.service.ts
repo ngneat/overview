@@ -1,6 +1,6 @@
 import { Injectable, ViewContainerRef } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { filter, map, startWith } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, startWith } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +16,8 @@ export class TeleportService {
       // registered outlet is visible to new subscribers.
       startWith(name),
       filter((current) => current === name),
-      map((name) => this.ports.get(name))
+      map((name) => this.ports.get(name)),
+      distinctUntilChanged()
     );
   }
 
