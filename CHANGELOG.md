@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [8.1.0](https://github.com/ngneat/overview/compare/v8.0.0...v8.1.0) (2026-04-15)
+
+
+### Features
+
+* support inputBinding, outputBinding, twoWayBinding, and directives at component creation ([#38](https://github.com/ngneat/overview/issues/38)) ([d6a087a](https://github.com/ngneat/overview/commit/d6a087acf560d66f23792fff008ed61c7a2c6724))
+
+
+### Bug Fixes
+
+* deduplicate outlet emissions to prevent content being rendered twice ([#36](https://github.com/ngneat/overview/issues/36)) ([8390726](https://github.com/ngneat/overview/commit/839072674dbe4acafa54ce12623152dd65eceafa))
+
 ### [8.0.1](https://github.com/ngneat/overview/compare/v8.0.0...v8.0.1) (2026-03-31)
 
 
