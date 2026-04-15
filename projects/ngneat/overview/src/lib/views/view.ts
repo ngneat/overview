@@ -1,5 +1,7 @@
 import {
   ApplicationRef,
+  type Binding,
+  type DirectiveWithBindings,
   EnvironmentInjector,
   inject,
   Injectable,
@@ -30,6 +32,8 @@ interface TemplateViewOptions extends _ViewOptions {
 interface CompViewOptions<Context = any> extends _ViewOptions {
   environmentInjector?: EnvironmentInjector | undefined;
   context?: Context | undefined;
+  bindings?: Binding[];
+  directives?: (Type<unknown> | DirectiveWithBindings<unknown>)[];
 }
 
 export type ViewOptions<Context = any> = _ViewOptions & CompViewOptions<Context> & TemplateViewOptions;
@@ -81,6 +85,8 @@ export class ViewService {
         appRef: this.appRef,
         environmentInjector: options.environmentInjector || this.environmentInjector,
         contextSignal,
+        bindings: options.bindings,
+        directives: options.directives,
       });
     });
   }

@@ -1,7 +1,9 @@
 import {
   ApplicationRef,
+  type Binding,
   ComponentRef,
   createComponent,
+  type DirectiveWithBindings,
   EnvironmentInjector,
   Injector,
   Type,
@@ -17,6 +19,8 @@ interface Options<Comp, Context> {
   vcr: ViewContainerRef | undefined;
   appRef: ApplicationRef | undefined;
   contextSignal?: WritableSignal<Context>;
+  bindings?: Binding[];
+  directives?: (Type<unknown> | DirectiveWithBindings<unknown>)[];
 }
 
 export class CompRef<Comp, Context = any> implements ViewRef {
@@ -29,6 +33,8 @@ export class CompRef<Comp, Context = any> implements ViewRef {
       this.ref = options.vcr.createComponent(options.component, {
         index: options.vcr.length,
         injector: options.injector || options.vcr.injector,
+        bindings: options.bindings,
+        directives: options.directives,
       });
     } else {
       // Without a ViewContainerRef the component is created detached from any view tree.
@@ -37,6 +43,8 @@ export class CompRef<Comp, Context = any> implements ViewRef {
       this.ref = createComponent<Comp>(options.component, {
         elementInjector: options.injector,
         environmentInjector: options.environmentInjector,
+        bindings: options.bindings,
+        directives: options.directives,
       });
       options.appRef.attachView(this.ref.hostView);
     }
