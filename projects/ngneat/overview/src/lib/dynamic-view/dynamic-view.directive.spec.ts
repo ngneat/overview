@@ -57,6 +57,19 @@ class TestComponent {
   }
 }
 
+@Component({
+  template: `
+    <section id="deferred">
+      <ng-container *dynamicView="view(); context: { $implicit: ctx() }"></ng-container>
+    </section>
+  `,
+  standalone: false,
+})
+class DeferredViewComponent {
+  view = signal<any>(undefined);
+  ctx = signal<string>('initial');
+}
+
 describe('DynamicViewDirective', () => {
   let spectator: Spectator<TestComponent>;
   const createComponent = createComponentFactory({
@@ -85,5 +98,22 @@ describe('DynamicViewDirective', () => {
 
   it('should create default template', () => {
     expect(spectator.query('#defaultTpl').innerHTML).toContain('default tpl');
+  });
+});
+
+describe('DynamicViewDirective - deferred view', () => {
+  let spectator: Spectator<DeferredViewComponent>;
+  const createComponent = createComponentFactory({
+    imports: [DynamicViewDirective],
+    component: DeferredViewComponent,
+  });
+
+  it('should not crash when context changes before view is set', () => {
+    spectator = createComponent();
+
+    expect(() => {
+      spectator.component.ctx.set('updated');
+      spectator.detectChanges();
+    }).not.toThrow();
   });
 });
