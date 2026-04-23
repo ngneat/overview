@@ -47,9 +47,9 @@ export class DynamicViewDirective implements OnInit, OnChanges {
     if (viewChanged) {
       this.resolveContentType();
     } else if (contextChanged) {
-      this.viewRef.updateContext(this.context());
+      this.viewRef?.updateContext(this.context());
     } else if (isComponent(this.view()) && inputsChanged) {
-      (this.viewRef as CompRef<any>).setInputs(this.inputs() || {});
+      (this.viewRef as CompRef<any>)?.setInputs(this.inputs() || {});
     }
   }
 
